@@ -1,23 +1,12 @@
-const mongoose = require('mongoose');
-require('dotenv').config(); // Load environment variables from .env file
 
-// Get MongoDB URI from environment variables or use a fallback URI
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/subscriptionmanagement';
+let mongoose=require('mongoose');
 
-const connectDB = async () => {
-  try {
-    // Establish connection to MongoDB
-    await mongoose.connect(MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+function DBConnection(){
+mongoose.connect('mongodb://localhost:27017/subscriptionmanagement').then(()=>{
+    console.log("DB Connected Successfully");
+}).catch((err)=>{
+    console.log("DB Connection Error Occur:"+err)
+})
+}
 
-    console.log('MongoDB connected successfully');
-  } catch (err) {
-    console.error('MongoDB connection failed:', err.message);
-    process.exit(1); // Exit process with failure
-  }
-};
-
-// Export the connection function
-module.exports = connectDB;
+module.exports=DBConnection;
