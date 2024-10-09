@@ -4,7 +4,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import './App.css'; // Import the CSS file
-
+import ForgotPassword from './components/ForgotPassword';
 const App = () => {
     // Helper function to check if the user is logged in
     const isAuthenticated = () => {
@@ -18,6 +18,7 @@ const App = () => {
             <Routes>
                 <Route path="/login" element={<Login setAuth={setAuth} />} />
                 <Route path="/register" element={<Register />} />
+                <Route path='/forgot-password' element={<ForgotPassword />} />
                 
                 {/* Protect dashboard route */}
                 <Route
