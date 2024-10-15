@@ -3,7 +3,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto'); 
 const nodemailer = require('nodemailer');
-
+const dotenv = require('dotenv');
+dotenv.config(); 
 
 // Registration controller
 const register = async (req, res) => {
@@ -52,7 +53,7 @@ const login = async (req, res) => {
         }
 
         // Generate JWT token
-        const token = jwt.sign({ id: user._id }, 'abc123', { expiresIn: '1h' });
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
         
         // Send token and user details in response
         res.json({
@@ -90,14 +91,16 @@ const forgotPassword = async (req, res) => {
         const transporter = nodemailer.createTransport({
             service: 'Gmail',
             auth: {
-                user: 'moshrxz@gmail.com', // Replace with your Gmail address
-                pass: 'nbwj iusx frvm plna',   // Replace with your Gmail password or App passwor
+                user: process.env.EMAIL_ADDRESS, 
+                pass: process.env.EMAIL_PASSWORD
             },
         });
 
+        console.log(process.env.EMAIL_ADDRESS);
+        
         const mailOptions = {
             to: user.email,
-            from: 'moshrxz@gmail.com',
+            from: process.env.EMAIL_ADDRESS,
             subject: 'Password Reset',
             text: `You are receiving this because you requested to reset your password. Please click on the link below or paste it into your browser: \n\n http://localhost:3000/reset-password/${token} \n\n If you did not request this, please ignore this email.`,
         };
