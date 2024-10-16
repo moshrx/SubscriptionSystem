@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
-import api from '../api';
+import { Link } from 'react-router-dom';
+import api from '../api'; // Use the correct API configuration
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -10,7 +10,7 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await api.post('/register', { name, email, password });
+            await api.post('/register', { name, email, password }); // Make sure this path is correct
             window.location.href = '/login'; // Redirect to login page after successful registration
         } catch (err) {
             console.error(err);
@@ -20,9 +20,27 @@ const Register = () => {
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Name" required />
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
+                <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Name"
+                    required
+                />
+                <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email"
+                    required
+                />
+                <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                    required
+                />
                 <button type="submit">Register</button>
             </form>
             <p>
