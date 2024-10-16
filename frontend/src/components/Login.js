@@ -5,6 +5,7 @@ import api from '../api';
 const Login = ({ setAuth }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState(false); // Track login errors
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -16,19 +17,37 @@ const Login = ({ setAuth }) => {
             window.location.href = '/dashboard'; // Redirect to dashboard
         } catch (err) {
             console.error(err);
+            setError(true); // Set error to true on failed login
         }
     };
 
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
-                <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
+                <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email"
+                    required
+                />
+                <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password"
+                    required
+                />
                 <button type="submit">Login</button>
             </form>
             <p>
                 Don't have an account? <Link to="/register">Register here</Link>
             </p>
+            {error && (
+                <p>
+                    Having trouble logging in? <Link to="/forgot-password">Reset your password here</Link>
+                </p>
+            )}
         </div>
     );
 };
