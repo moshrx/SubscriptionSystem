@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
@@ -8,12 +8,16 @@ import ForgotPassword from './components/ForgotPassword';
 import ResetPasswordForm from './components/ResetPasswordForm';
 
 const App = () => {
-    // Helper function to check if the user is logged in
-    const isAuthenticated = () => {
-        return localStorage.getItem('token') !== null;
-    };
-
     const [auth, setAuth] = useState(null); // To track authentication
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        setAuth(token);
+    }, []);
+
+    const isAuthenticated = () => {
+        return auth !== null;
+    };
 
     return (
         <Router>
