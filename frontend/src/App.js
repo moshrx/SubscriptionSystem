@@ -4,6 +4,8 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import './App.css'; // Import the CSS file
+import ForgotPassword from './components/ForgotPassword';
+import ResetPasswordForm from './components/ResetPasswordForm';
 
 const App = () => {
     const [auth, setAuth] = useState(null); // To track authentication
@@ -22,6 +24,8 @@ const App = () => {
             <Routes>
                 <Route path="/login" element={<Login setAuth={setAuth} />} />
                 <Route path="/register" element={<Register />} />
+                <Route path='/forgot-password' element={<ForgotPassword />} />
+                <Route path='/reset-password/:token' element={<ResetPasswordForm />} />
                 
                 {/* Protect dashboard route */}
                 <Route
