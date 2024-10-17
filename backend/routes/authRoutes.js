@@ -28,7 +28,7 @@ router.post('/reset/:token', async (req, res) => {
             resetPasswordExpires: { $gt: Date.now() },
         });
         
-        console.log("User found:", user);
+        //console.log("User found:", user);
 
 
         if (!user) {
