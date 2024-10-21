@@ -1,67 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import api from '../api'; // Assuming you have an API handler for making requests
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-    const [username, setUsername] = useState('');
-    const [isPremium, setIsPremium] = useState(false);
-    const [subscriptions, setSubscriptions] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
+    const [user, setUser] = useState('');
 
     useEffect(() => {
+        // Check if the token exists in localStorage
         const token = localStorage.getItem('token');
-
-        if (token) {
-            fetchUserData(token);
+        console.log("token----------",token);
+        if (!token) {
+            // If no token is found, redirect to login
+            console.log('No token found, redirecting to login.');
+            navigate('/login');
         } else {
-            window.location.href = '/login'; // Redirect to login if not logged in
+            const username = localStorage.getItem('username'); // Retrieve the stored username
+            setUser(username || 'User');
         }
-    }, []);
-
-    const fetchUserData = async (token) => {
-        try {
-            // Fetch user details (including premium status)
-            const { data: userData } = await api.getUserDetails(token);
-            setUsername(userData.name);
-            setIsPremium(userData.isPremium);
-
-            // Fetch subscriptions
-            const { data: subscriptionsData } = await api.getUserSubscriptions(userData._id, token);
-            setSubscriptions(subscriptionsData);
-        } catch (error) {
-            console.error('Error fetching user data:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const handleLogout = () => {
-        // Clear the token and username from localStorage
-        localStorage.removeItem('token');
-        localStorage.removeItem('username');
-
-        // Redirect to login page
-        window.location.href = '/login';
-    };
-
-    const isBasicUserMaxedOut = () => !isPremium && subscriptions.length >= 3;
-
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
+    }, [navigate]);
 
     return (
-        <div className="dashboard">
-            <div className="dashboard-header">
-                <h1>Welcome, {username}!</h1>
-                <button onClick={handleLogout}>Logout</button>
-            </div>
-
-            <div className="dashboard-content">
-                {isBasicUserMaxedOut() ? (
-                    <p>You have reached the maximum number of subscriptions for basic users. Upgrade to premium for unlimited subscriptions.</p>
-                ) : (
-                    <button onClick={() => alert('Subscribe to a new app')}>Subscribe to New App</button>
-                )}
+        <div className="flex justify-center items-center h-screen">
+            <div className="bg-white p-8 rounded shadow-md w-96 text-center">
+                <h1 className="text-3xl font-bold mb-6">Welcome, {user}!</h1>
+                <p className="text-gray-600">You have successfully logged in to your dashboard.</p>
+                <button
+                    className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 rounded mt-4"
+                    onClick={() => {
+                        localStorage.removeItem('token');
+                        navigate('/login');
+                    }}
+                >
+                    Logout
+                </button>
             </div>
         </div>
     );
