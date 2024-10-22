@@ -171,4 +171,53 @@ body {
   }
   
    
-    
+    /* Footer styles */
+.footer {
+  background-color: #990011; /* Deep red background */
+  color: #FCF6F5; /* Light pink text */
+  padding: 20px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.footer-info {
+  margin: 10px 0;
+}
+
+.footer-info a {
+  color: #FCF6F5; /* Light pink for links */
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.footer-info a:hover {
+  text-decoration: underline;
+}
+
+.footer-links ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+}
+
+.footer-links li {
+  margin: 0 10px;
+}
+
+.footer-links a {
+  color: #FCF6F5; /* Light pink for links */
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
