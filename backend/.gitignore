@@ -1,5 +1,57 @@
-# Environment variables
-.env
+# Ignore node_modules
+node_modules/
 
-# Node.js dependencies
-/node_modules
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Ignore dotenv environment variables
+.env
+.env.*.local
+
+# Ignore database files
+*.sqlite
+*.sqlite3
+*.db
+*.db-journal
+
+# Ignore coverage reports
+coverage/
+
+# Ignore local testing files
+*.local
+
+# Ignore lockfiles (optional)
+package-lock.json
+yarn.lock
+
+# Ignore debug files
+debug/
+debug.log*
+
+# Build files
+dist/
+build/
+
+# Ignore IDE or editor specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore temporary files
+tmp/
+temp/
+*.tmp
+
+# Ignore cache
+.cache/
