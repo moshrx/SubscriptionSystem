@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
+import Subscription from './components/Subscription'; // Import the new Subscription component
 import Header from './components/Header'; // Import the Header component
 import Footer from './components/Footer'; // Import the Footer component
 import './App.css'; // Import the CSS file
@@ -23,6 +24,25 @@ const App = () => {
 
     return (
         <Router>
+            <Routes>
+                <Route path="/login" element={<Login setAuth={setAuth} />} />
+                <Route path="/register" element={<Register />} />
+                <Route path='/forgot-password' element={<ForgotPassword />} />
+                <Route path='/reset-password/:token' element={<ResetPasswordForm />} />
+
+                {/* Protect dashboard and subscription routes */}
+                <Route
+                    path="/dashboard"
+                    element={isAuthenticated() ? <Dashboard /> : <Navigate to="/login" />}
+                />
+                <Route
+                    path="/subscriptions"
+                    element={isAuthenticated() ? <Subscription /> : <Navigate to="/login" />}
+                />
+
+                {/* Redirect to login if accessing root path */}
+                <Route path="/" element={<Navigate to="/login" />} />
+            </Routes>
             <div>
                 {/* Render Header */}
                 <Header />

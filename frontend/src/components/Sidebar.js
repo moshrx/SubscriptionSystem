@@ -1,4 +1,4 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaBars, FaTimes, FaUserCircle } from 'react-icons/fa'; 
 import { BiLogOut } from 'react-icons/bi'; 
 import '../styles/styles.css'; 
@@ -21,6 +21,7 @@ const Sidebar = ({ handleLogout }) => {
     // Clear the user session from localStorage
     localStorage.removeItem('token');
     localStorage.removeItem('username');
+    localStorage.removeItem('userId'); // Ensure userId is cleared as well
 
     // Redirect the user to the login page
     navigate('/login');
@@ -28,6 +29,14 @@ const Sidebar = ({ handleLogout }) => {
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen); // Toggle between true/false
+  };
+
+  const handleMenuClick = (menu) => {
+    if (menu === 'subscriptions') {
+        navigate('/subscriptions'); // Navigate to the subscriptions page
+    } else if (menu === 'dashboard') {
+        navigate('/dashboard'); // Navigate to the dashboard page
+    }
   };
 
   return (
@@ -39,18 +48,17 @@ const Sidebar = ({ handleLogout }) => {
         <>
           <h2>Quick Menu</h2>
           <ul>
-            <li>Dashboard</li>
-            <li>Subscriptions</li>
+            <li onClick={() => handleMenuClick('dashboard')}>Dashboard</li>
+            <li onClick={() => handleMenuClick('subscriptions')}>Subscriptions</li>
             <li>Explore</li>
             <li>Products</li>
           </ul>
-          
 
           {/* Profile and Logout section */}
           <div className="profile-section">
             <FaUserCircle className="profile-icon" size={40} />
             <div className="profile-details">
-            <p>{username ? username : 'Guest User'}</p>
+              <p>{username ? username : 'Guest User'}</p>
             </div>
             <button className="logout-button" onClick={handleLogoutClick}>
               <BiLogOut /> Logout
