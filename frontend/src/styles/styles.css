@@ -15,7 +15,7 @@ body {
 
 .dashboard-body {
   flex-grow: 1;
-  padding: 20px;
+  padding: 35px;
   background-color: #FCF6F5;
   overflow-y: auto;
   transition: margin-left 0.3s ease; /* Smooth transition when sidebar toggles */
@@ -27,20 +27,20 @@ body {
 }
 
 .main-content {
-  background-color: white;
-  padding: 20px;
+  flex-grow: 1;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Header styles */
 .header {
-  background-color: #990011;
+  width: 100%;
+  background-color: #990011; 
   color: white;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  padding: 15px;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Ensure header stays on top */
 }
 
 .header h1 {
@@ -51,6 +51,13 @@ body {
 .header-buttons {
   display: flex;
   align-items: center;
+}
+
+/* Footer */
+.footer {
+  background-color: #FCF6F5; 
+  padding: 10px;
+  text-align: center;
 }
 
 .upgrade-button {
@@ -82,7 +89,7 @@ body {
   color: #FCF6F5;
   height: 100vh;
   padding: 20px;
-  position: relative;
+  position: sticky;
   top: 0;
   left: 0;
   transition: transform 0.3s ease;
@@ -115,20 +122,58 @@ body {
   background-color: #fc8181;
 }
 
-/* Sidebar menu content */
-ul {
-  list-style-type: none;
+/* Drawer Box */
+.drawer-box {
+  width: 250px;
   padding: 0;
+  background-color: #FCF6F5;
+  height: 100%;
 }
 
-ul li {
-  margin: 15px 0;
+/* Drawer Title */
+.drawer-title {
+  padding: 16px;
+  text-align: center;
+  font-weight: bold;
+  background-color: #990011; /* Optional: Sidebar header background color */
+  color: white;
+}
+
+/* Drawer Items */
+.drawer-item {
+  color: #990011;
   cursor: pointer;
+  padding: 10px 16px;
 }
 
-.sidebar ul li:hover {
+.drawer-item:hover {
   background-color: #FCF6F5;
   color: #990011;
+}
+
+/* Profile Section */
+.profile-section {
+  padding: 16px;
+  text-align: center;
+  color: #990011;
+}
+
+/* Profile Username */
+.profile-username {
+  margin-top: 8px;
+}
+
+/* Logout Button */
+.logout-button {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  color: #990011;
+}
+
+/* Logout Text */
+.logout-text {
+  margin-left: 8px;
 }
 
 /* Profile Section */
@@ -172,6 +217,22 @@ ul li {
 }
 
 /* Subscription Table Styles */
+.subscription-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.subscription-table th,
+.subscription-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.subscription-table th {
+  background-color: #990011;
+  color: white;
+}
 .subscription-table {
   margin-top: 20px;
   padding: 20px;

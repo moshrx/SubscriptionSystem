@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const subscriptionSchema = new mongoose.Schema({
   subscriptionId: {
-    type: Number,
+    type: String,
     required: true,
     unique: true
   },
@@ -11,7 +11,7 @@ const subscriptionSchema = new mongoose.Schema({
     required: true
   },
   userId: {
-    type: Number,
+    type: String,
     required: true
   },
   cost: {

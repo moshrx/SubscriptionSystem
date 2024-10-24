@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { FaBars, FaTimes, FaUserCircle } from 'react-icons/fa'; 
-import { BiLogOut } from 'react-icons/bi'; 
-import '../styles/styles.css'; 
+import { FaBars, FaUserCircle } from 'react-icons/fa';
+import { BiLogOut } from 'react-icons/bi';
+import { Drawer, IconButton, List, ListItem, ListItemText, Divider, Typography, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import '../styles/styles.css'; // Import external CSS
 
 const Sidebar = ({ handleLogout }) => {
-  const [isOpen, setIsOpen] = useState(true); 
+  const [isOpen, setIsOpen] = useState(false); // Drawer state
   const [username, setUsername] = useState(''); // State to store username
   const navigate = useNavigate();
 
@@ -18,54 +19,78 @@ const Sidebar = ({ handleLogout }) => {
 
   // Handle logout functionality
   const handleLogoutClick = () => {
-    // Clear the user session from localStorage
     localStorage.removeItem('token');
     localStorage.removeItem('username');
-    localStorage.removeItem('userId'); // Ensure userId is cleared as well
-
-    // Redirect the user to the login page
     navigate('/login');
   };
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen); // Toggle between true/false
-  };
-
-  const handleMenuClick = (menu) => {
-    if (menu === 'subscriptions') {
-        navigate('/subscriptions'); // Navigate to the subscriptions page
-    } else if (menu === 'dashboard') {
-        navigate('/dashboard'); // Navigate to the dashboard page
+  // Handle navigation menu clicks
+  const handleMenuClick = (page) => {
+    switch (page) {
+      case 'dashboard':
+        navigate('/dashboard');
+        break;
+      case 'subscriptions':
+        navigate('/subscriptions');
+        break;
+      case 'explore':
+        navigate('/explore');
+        break;
+      case 'products':
+        navigate('/products');
+        break;
+      default:
+        break;
     }
   };
 
+  // Toggle Drawer
+  const toggleDrawer = (open) => {
+    setIsOpen(open);
+  };
+
   return (
-    <div className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
-      <div className="toggle-btn" onClick={toggleSidebar}>
-        {isOpen ? <FaTimes /> : <FaBars />} {/* Show toggle icon */}
-      </div>
-      {isOpen && (
-        <>
-          <h2>Quick Menu</h2>
-          <ul>
-            <li onClick={() => handleMenuClick('dashboard')}>Dashboard</li>
-            <li onClick={() => handleMenuClick('subscriptions')}>Subscriptions</li>
-            <li>Explore</li>
-            <li>Products</li>
-          </ul>
+    <div>
+      {/* Toggle button for opening Drawer */}
+      <IconButton className="toggle-btn" onClick={() => toggleDrawer(true)}>
+        <FaBars size={24} />
+      </IconButton>
+
+      {/* Drawer component */}
+      <Drawer anchor="left" open={isOpen} onClose={() => toggleDrawer(false)}>
+        <Box className="drawer-box" role="presentation" onClick={() => toggleDrawer(false)} onKeyDown={() => toggleDrawer(false)}>
+          <Typography variant="h6" className="drawer-title">Quick Menu</Typography>
+          <Divider />
+
+          <List>
+            <ListItem button onClick={() => handleMenuClick('dashboard')} className="drawer-item">
+              <ListItemText primary="Dashboard" />
+            </ListItem>
+            <ListItem button onClick={() => handleMenuClick('subscriptions')} className="drawer-item">
+              <ListItemText primary="Subscriptions" />
+            </ListItem>
+            <ListItem button onClick={() => handleMenuClick('explore')} className="drawer-item">
+              <ListItemText primary="Explore" />
+            </ListItem>
+            <ListItem button onClick={() => handleMenuClick('products')} className="drawer-item">
+              <ListItemText primary="Products" />
+            </ListItem>
+          </List>
+
+          <Divider />
 
           {/* Profile and Logout section */}
-          <div className="profile-section">
-            <FaUserCircle className="profile-icon" size={40} />
-            <div className="profile-details">
-              <p>{username ? username : 'Guest User'}</p>
-            </div>
-            <button className="logout-button" onClick={handleLogoutClick}>
-              <BiLogOut /> Logout
-            </button>
-          </div>
-        </>
-      )}
+          <Box className="profile-section">
+            <FaUserCircle size={40} />
+            <Typography variant="body1" className="profile-username">
+              {username ? username : 'Guest User'}
+            </Typography>
+            <IconButton onClick={handleLogoutClick} className="logout-button">
+              <BiLogOut /> <Typography className="logout-text">Logout</Typography>
+            </IconButton>
+          </Box>
+        </Box>
+      </Drawer>
     </div>
   );
 };

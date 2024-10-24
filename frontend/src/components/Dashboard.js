@@ -47,7 +47,6 @@ const Dashboard = ({ userName }) => {
     return (
         <div className="dashboard">
             <div className="dashboard-container">
-            <Sidebar />
                 <div className="dashboard-body">
                     <h1>Welcome, {username}!</h1>
                     {/* Add content here */}
