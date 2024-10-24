@@ -1,3 +1,12 @@
-.App {
-  text-align: center;
+/* Flex container for the sidebar and main content */
+.app-layout {
+  display: flex;
+  min-height: 100vh; /* Full height layout */
+}
+
+
+/* Main content area */
+.main-content {
+  flex-grow: 1;
+  min-height: 100vh;
 }
