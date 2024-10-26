@@ -15,7 +15,7 @@ const Login = ({ setAuth }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         let valid = true;
-
+    
         // Email validation
         if (email.trim() === '') {
             setEmailError('Email is required');
@@ -23,7 +23,7 @@ const Login = ({ setAuth }) => {
         } else {
             setEmailError('');
         }
-
+    
         // Password validation
         if (password.trim() === '') {
             setPasswordError('Password is required');
@@ -31,21 +31,22 @@ const Login = ({ setAuth }) => {
         } else {
             setPasswordError('');
         }
-
+    
         // Only proceed if both fields are filled
         if (!valid) return;
-
+    
         try {
             const { data } = await api.post('/login', { email, password });
             setAuth(data.token);
             localStorage.setItem('token', data.token); // Store token in localStorage
+            localStorage.setItem('userId', data.user.id); // Store userId, adjust this based on your API response
             localStorage.setItem('username', data.user.name); // Store username
             navigate('/dashboard'); // Redirect to dashboard
         } catch (err) {
             console.error(err);
             setError('Invalid credentials'); // Set error for invalid login attempt
         }
-    };
+    };   
 
     return (
 

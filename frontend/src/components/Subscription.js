@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import api from '../api'; // Import your API module
-import '../styles/styles.css'; // Import your styles
+import { Link } from 'react-router-dom'; // Import Link for navigation
+import api from '../api';
+import '../styles/styles.css';
 
 const Subscription = () => {
     const [subscriptions, setSubscriptions] = useState([]);
@@ -9,9 +10,9 @@ const Subscription = () => {
     useEffect(() => {
         const fetchSubscriptions = async () => {
             const token = localStorage.getItem('token');
-            const userId = localStorage.getItem('userId'); // Assuming userId is stored in localStorage
+            const userId = localStorage.getItem('userId');
             try {
-                const { data } = await api.getUserSubscriptions(userId, token); // Fetch subscriptions
+                const { data } = await api.getUserSubscriptions(userId, token);
                 setSubscriptions(data);
             } catch (error) {
                 console.error('Error fetching subscriptions:', error);
@@ -38,6 +39,7 @@ const Subscription = () => {
                         <th>Subscription Date</th>
                         <th>Renewal Date</th>
                         <th>Reminder Date</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -48,10 +50,19 @@ const Subscription = () => {
                             <td>{new Date(subscription.subscriptionDate).toLocaleDateString()}</td>
                             <td>{new Date(subscription.renewalDate).toLocaleDateString()}</td>
                             <td>{new Date(subscription.reminderDate).toLocaleDateString()}</td>
+                            <td>
+                                <button>Edit</button>
+                                <button>Delete</button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
             </table>
+
+            {/* Add a "+" button to navigate to the add subscription page */}
+            <Link to="/add-subscription">
+                <button className="add-subscription-btn">+ Add Subscription</button>
+            </Link>
         </div>
     );
 };

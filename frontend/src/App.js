@@ -3,13 +3,14 @@ import { BrowserRouter as Router, Route, Routes, Navigate, useLocation } from 'r
 import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
-import Subscription from './components/Subscription'; // Import the new Subscription component
-import Header from './components/Header'; // Import the Header component
-import Footer from './components/Footer'; // Import the Footer component
+import Subscription from './components/Subscription';
+import Header from './components/Header';
+import Footer from './components/Footer';
 import Sidebar from './components/Sidebar';
-import './App.css'; // Import the CSS file
 import ForgotPassword from './components/ForgotPassword';
 import ResetPasswordForm from './components/ResetPasswordForm';
+import AddSubscriptionForm from './components/AddSubscriptionForm';
+import './App.css';
 
 const AppContent = () => {
     const [auth, setAuth] = useState(null);
@@ -28,12 +29,12 @@ const AppContent = () => {
 
     return (
         <>
-            {isAuthenticated() && shouldShowSidebar && <Header />} {/* Render Header */}
-
+            {isAuthenticated() && shouldShowSidebar && <Header />}
+            
             <div className="app-layout">
-                {isAuthenticated() && shouldShowSidebar && <Sidebar />} {/* Render Sidebar */}
+                {isAuthenticated() && shouldShowSidebar && <Sidebar />}
                 
-                <div className="main-content"> {/* Main content area */}
+                <div className="main-content">
                     <Routes>
                         <Route path="/login" element={<Login setAuth={setAuth} />} />
                         <Route path="/register" element={<Register />} />
@@ -48,17 +49,20 @@ const AppContent = () => {
                             path="/subscriptions"
                             element={isAuthenticated() ? <Subscription /> : <Navigate to="/login" />}
                         />
+                        <Route
+                            path="/add-subscription"
+                            element={isAuthenticated() ? <AddSubscriptionForm /> : <Navigate to="/login" />}
+                        />
 
                         <Route path="/" element={<Navigate to="/login" />} />
                     </Routes>
                 </div>
             </div>
 
-            {isAuthenticated() && shouldShowSidebar && <Footer />} {/* Render Footer */}
+            {isAuthenticated() && shouldShowSidebar && <Footer />}
         </>
     );
 };
-
 
 const App = () => {
     return (
