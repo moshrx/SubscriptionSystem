@@ -8,7 +8,8 @@ const applicationSchema = new mongoose.Schema({
   },
   categoryId: {
     type: Number,
-    required: true
+    required: true,
+    ref: 'Category'
   },
   appName: {
     type: String,

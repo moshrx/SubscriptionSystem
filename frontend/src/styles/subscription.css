@@ -1,0 +1,99 @@
+/* Subscription Table Container */
+.subscription-table {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #FCF6F5; /* Background color for the table section */
+    border-radius: 10px; /* Rounded corners for the table */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+}
+
+/* Table Title */
+.subscription-table h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #990011;
+    text-align: center;
+}
+
+/* Add Subscription Button */
+.subscription-table .btn-primary {
+    background-color: #990011;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+    margin-bottom: 20px;
+    display: block;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.subscription-table .btn-primary:hover {
+    background-color: #bb1122;
+}
+
+/* Table Styling */
+.subscription-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Table Headers */
+.subscription-table th {
+    background-color: #990011;
+    color: #FCF6F5;
+    padding: 15px;
+    text-align: left;
+    font-weight: bold;
+}
+
+/* Table Cells */
+.subscription-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    color: #333;
+}
+
+/* Alternate row colors for better readability */
+.subscription-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Table Hover Effect */
+.subscription-table tr:hover {
+    background-color: #f1e6e5;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+    .subscription-table table,
+    .subscription-table th,
+    .subscription-table td {
+        display: block;
+        width: 100%;
+    }
+    .subscription-table th {
+        display: none;
+    }
+    .subscription-table td {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+    .subscription-table td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #990011;
+        flex: 1;
+        margin-right: 10px;
+    }
+}

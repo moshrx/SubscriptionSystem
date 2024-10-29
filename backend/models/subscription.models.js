@@ -8,11 +8,13 @@ const subscriptionSchema = new mongoose.Schema({
   },
   appId: {
     type: Number,
-    required: true
+    required: true,
+    ref:'Application'
   },
   userId: {
     type: String,
-    required: true
+    required: true,
+    ref:'User'
   },
   cost: {
     type: mongoose.Types.Decimal128,
