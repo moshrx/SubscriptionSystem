@@ -2,9 +2,6 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User'); // Assuming this is your user model
 
-// Middleware to get user by token (if you are using JWT authentication)
-const authenticate = require('../middleware/authenticate'); // Adjust the path if necessary
-
 // Get user details route (returns user's premium status and other info)
 router.get('/user', authenticate, async (req, res) => {
     try {
