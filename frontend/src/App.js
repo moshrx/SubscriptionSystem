@@ -10,6 +10,7 @@ import Sidebar from './components/Sidebar';
 import './App.css'; // Import the CSS file
 import ForgotPassword from './components/ForgotPassword';
 import ResetPasswordForm from './components/ResetPasswordForm';
+import AddSubscription from './components/AddSubscription';
 
 const AppContent = () => {
     const [auth, setAuth] = useState(null);
@@ -48,6 +49,8 @@ const AppContent = () => {
                             path="/subscriptions"
                             element={isAuthenticated() ? <Subscription /> : <Navigate to="/login" />}
                         />
+
+                        <Route path="/add-subscription" element={<AddSubscription />} />
 
                         <Route path="/" element={<Navigate to="/login" />} />
                     </Routes>
