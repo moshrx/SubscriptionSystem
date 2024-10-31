@@ -7,9 +7,27 @@ const api = axios.create({
     },
 });
 
+export const getUserDetails = async (userId, token) => {
+    const response = await axios.get(`http://localhost:5000/api/users/${userId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    return response.data;
+};
+
 export const getUserSubscriptions = async (userId, token) => {
-    const response = await api.get(`/subscriptions/${userId}`, {
+    const response = await api.get(`../subscription/subscriptions/${userId}`, { // Using a relative path to access the subscription endpoint
         headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+};
+
+export const getDashboardDetails = async (userId, token) => {
+    const response = await axios.get(`http://localhost:5000/api/subscription/dashboard/${userId}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
     });
     return response.data;
 };

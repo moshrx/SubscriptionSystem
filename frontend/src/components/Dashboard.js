@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import api from '../api'; 
-import Sidebar from './Sidebar';
+import { getUserDetails, getUserSubscriptions } from '../api';
 import '../styles/styles.css';
+import ChartPage from './Dashboard/ChartPage';
 
 const Dashboard = ({ userName }) => {
     const navigate = useNavigate();
@@ -26,17 +26,25 @@ const Dashboard = ({ userName }) => {
 
     const fetchUserData = async (token) => {
         try {
-            const { data: userData } = await api.getUserDetails(token);
+            const userId = localStorage.getItem('userId'); // Retrieve userId from localStorage
+            const userData = await getUserDetails(userId, token); // Call getUserDetails directly
             setUsername(userData.name);
             setIsPremium(userData.isPremium);
-            const { data: subscriptionsData } = await api.getUserSubscriptions(userData._id, token);
+            console.log(userId);
+            
+    
+            const subscriptionsData = await getUserSubscriptions(userId, token); // Call getUserSubscriptions directly
             setSubscriptions(subscriptionsData);
+
+            console.log(userId, userData);
+            
         } catch (error) {
             console.error('Error fetching user data:', error);
         } finally {
             setIsLoading(false);
         }
     };
+    
 
     const isBasicUserMaxedOut = () => !isPremium && subscriptions.length >= 3;
 
@@ -48,8 +56,7 @@ const Dashboard = ({ userName }) => {
         <div className="dashboard">
             <div className="dashboard-container">
                 <div className="dashboard-body">
-                    <h1>Welcome, {username}!</h1>
-                    {/* Add content here */}
+                   <ChartPage subscriptions={subscriptions} />
                 </div>
             </div>
         </div>
