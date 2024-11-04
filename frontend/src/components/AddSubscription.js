@@ -8,8 +8,6 @@ const AddSubscriptionPage = () => {
     const navigate = useNavigate();
     const existingSubscription = location.state?.existingSubscription || null;
 
-    console.log("Existing Subscription === ", existingSubscription);
-
     const [apps, setApps] = useState([]);
     const [subscription, setSubscription] = useState({
         appId: '',
@@ -18,6 +16,7 @@ const AddSubscriptionPage = () => {
         renewalDate: '',
         reminderEnabled: false,
         subscriptionPeriod: '',
+        reminderDate: '',
     });
 
     const formatDate = (dateString) => {
@@ -39,7 +38,12 @@ const AddSubscriptionPage = () => {
                 subscriptionDate: formatDate(existingSubscription.subscriptionDate),
                 renewalDate: formatDate(existingSubscription.renewalDate),
                 reminderEnabled: existingSubscription.reminderEnabled || false,
-                subscriptionPeriod: calculateSubscriptionPeriod(
+                reminderDate: formatDate(existingSubscription.reminderDate),
+                reminderDays:calculateReminderDays(
+                    existingSubscription.renewalDate,
+                    existingSubscription.reminderDate
+                ),
+                renewalMonths: calculateSubscriptionPeriod(
                     existingSubscription.subscriptionDate,
                     existingSubscription.renewalDate
                 ),
@@ -51,10 +55,32 @@ const AddSubscriptionPage = () => {
         if (startDate && endDate) {
             const start = new Date(startDate);
             const end = new Date(endDate);
-            const periodInDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
-            return `${periodInDays} days`;
+    
+            // Calculate the difference in years and months
+            let years = end.getFullYear() - start.getFullYear();
+            let months = end.getMonth() - start.getMonth();
+    
+            // Adjust if end month is earlier in the year than start month
+            if (months < 0) {
+                years--;
+                months += 12;
+            }
+    
+            // Convert total time difference to months
+            const totalMonths = years * 12 + months;
+            console.log("Subscirption Months - ",totalMonths);
+            return totalMonths;
         }
         return '';
+    };
+
+    const calculateReminderDays = (renewalDate, reminderDate) => {
+        if (!renewalDate || !reminderDate) return '';
+        const renewal = new Date(renewalDate);
+        const reminder = new Date(reminderDate);
+        const diffTime = renewal.getTime() - reminder.getTime();
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        return diffDays;
     };
     
 
@@ -76,7 +102,6 @@ const AddSubscriptionPage = () => {
                 return response.json();
             })
             .then(data => {
-                console.log("Apps = ", data);
                 setApps(data);
             })
             .catch(error => {
@@ -134,6 +159,8 @@ const AddSubscriptionPage = () => {
     };
 
     const handleSubmit = async (e) => {
+        console.log("Existing Subs in handle submit- ",existingSubscription);
+
         e.preventDefault();
 
         const apiUrl = isEditMode
@@ -188,11 +215,11 @@ const AddSubscriptionPage = () => {
                 <label>
                     Subscription Period (Months):
                     <select name="renewalMonths" value={subscription.renewalMonths} onChange={handleChange} required>
-                        <option value="1">1 month</option>
-                        <option value="3">3 months</option>
-                        <option value="6">6 months</option>
-                        <option value="9">9 months</option>
-                        <option value="12">12 months</option>
+                        <option value="1">1</option>
+                        <option value="3">3</option>
+                        <option value="6">6</option>
+                        <option value="9">9</option>
+                        <option value="12">12</option>
                     </select>
                 </label>
                 <label>

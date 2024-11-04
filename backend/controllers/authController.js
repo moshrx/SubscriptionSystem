@@ -68,6 +68,7 @@ const login = async (req, res) => {
         userId : user.userId,
         name: user.name,
         email: user.email,
+        isPremium: user.isPremium
       },
     });
   } catch (error) {

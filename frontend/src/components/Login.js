@@ -41,6 +41,7 @@ const Login = ({ setAuth }) => {
             localStorage.setItem('token', data.token); // Store token in localStorage
             localStorage.setItem('username', data.user.name); // Store username
             localStorage.setItem('userId', data.user.userId); // Store userId for later use
+            localStorage.setItem('isPremiumUser',data.user.isPremium);
             navigate('/dashboard'); // Redirect to dashboard
         } catch (err) {
             console.error(err);

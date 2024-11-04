@@ -4,10 +4,28 @@ const Subscription = require('../models/subscription.models');
 const Application = require('../models/application.models');
 const User = require('../models/user.models');
 const Category = require('../models/category.models');
-const { addSubscription } = require('../controllers/subscriptionController');
+const { addSubscription, updateSubscription } = require('../controllers/subscriptionController');
 
 // Route to add a subscription
 router.post('/add', addSubscription);
+
+// Route to update a subscription
+router.put('/:subscriptionId/update', async (req, res) => {
+    const { subscriptionId } = req.params;
+    const updatedData = req.body;
+    try {
+        const subData = await Subscription.findOne({ subscriptionId: String(subscriptionId) });
+        const updatedSubscription = await Subscription.findOneAndUpdate({ subscriptionId: String(subscriptionId) }, updatedData, {new : true});
+        if (!updatedSubscription) {
+            return res.status(404).json({ message: 'Subscription not found' });
+        }
+        res.json(updatedSubscription);
+    } catch (error) {
+        console.error('Error updating subscription:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 
 // GET all applications
 router.get('/apps', async (req, res) => {
@@ -23,13 +41,25 @@ router.get('/apps', async (req, res) => {
 
 // GET all subscriptions
 router.get('/subscriptions', async (req, res) => {
+    const userId = req.query.userId;
     try {
-        //console.log("Fetching subscriptions");
-        const subscriptions = await Subscription.find({}, 'subscriptionId appId userId cost subscriptionDate renewalDate'); // Fetch only appId and appName
+        const subscriptions = await Subscription.find({ userId });
         res.json(subscriptions);
     } catch (error) {
         console.error('Error fetching subscriptions:', error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ error: 'Failed to fetch subscriptions' });
+    }
+});
+
+//api to get subscription count to check for basic or premium user
+router.get('/subscriptionCount', async (req, res) => {
+    const userId = req.query.userId;
+    try {
+        const subscriptionCount = await Subscription.countDocuments({ userId });
+        res.json({ subscriptionCount });
+    } catch (error) {
+        console.error("Error getting subscription count:", error);
+        res.status(500).json({ message: 'Internal server error' });
     }
 });
 
