@@ -9,7 +9,7 @@ const subscriptionSchema = new mongoose.Schema({
   appId: {
     type: Number,
     required: true,
-    ref:'Application'
+    // ref:'Application'
   },
   userId: {
     type: String,
