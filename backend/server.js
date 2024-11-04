@@ -1,9 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const authRoutes = require('./Routes/authRoutes');
-const userRoutes = require('./Routes/userRoutes');
-const SubscriptionRoute = require('./Routes/subscription')
+const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const SubscriptionRoute = require('./routes/subscription')
 const DBConnection = require('./config/db');
 
 const app = express();
