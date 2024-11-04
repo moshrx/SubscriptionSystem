@@ -56,7 +56,8 @@ const updateSubscription = async (req, res) => {
     const { cost, subscriptionDate, renewalMonths, reminderEnabled, reminderDays } = req.body;
 
     try {
-        const subscription = await Subscription.findOne({ subscriptionId });
+        const subscription = await Subscription.findOne({ subscriptionId: String(subscriptionId) });
+        console.log("Subs in controller - ",subscription);
         if (!subscription) {
             return res.status(404).json({ message: 'Subscription not found' });
         }
