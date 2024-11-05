@@ -6,7 +6,7 @@ const notificationLogSchema = new mongoose.Schema({
     required: true,
   },
   subscriptionId: {
-    type: Number,
+    type: String,
     required: true,
   },
   sentAt: {

@@ -5,6 +5,7 @@ const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const SubscriptionRoute = require('./routes/subscription')
 const DBConnection = require('./config/db');
+const reminderRoute = require('./routes/reminderRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -20,6 +21,7 @@ DBConnection();
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/subscription', SubscriptionRoute);
+app.use('/api/reminders', reminderRoute);
 
 
 // Start server
