@@ -4,6 +4,8 @@ const NotificationLog = require('../models/notificationLogs.models');
 const Application = require('../models/application.models'); // Import Application model
 const nodemailer = require('nodemailer');
 const dotenv = require("dotenv");
+const cron = require('node-cron');
+
 dotenv.config();
 
 // Set up email transport (Nodemailer config)
@@ -15,7 +17,8 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendReminderEmails = async (req, res) => {
+// Function to send reminder emails
+const sendReminderEmails = async () => {
   try {
     // Get current date
     const currentDate = new Date();
@@ -59,13 +62,18 @@ const sendReminderEmails = async (req, res) => {
       });
     }
 
-    res.status(200).json({ message: 'Reminder emails sent successfully' });
+    console.log('Reminder emails sent successfully');
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Error sending reminder emails', error });
+    console.error('Error sending reminder emails:', error);
   }
 };
 
+// Schedule the job to run every day at 4:20 PM
+cron.schedule('20 16 * * *', async () => {
+    console.log('Running scheduled task: Sending reminder emails at 4:20 PM');
+    await sendReminderEmails();
+  });
+  
 module.exports = {
   sendReminderEmails,
 };
