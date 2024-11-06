@@ -9,6 +9,7 @@ const AddSubscriptionPage = () => {
     const existingSubscription = location.state?.existingSubscription || null;
 
     const [apps, setApps] = useState([]);
+    const [isPremiumUser, setIsPremiumUser] = useState(false);
     const [subscription, setSubscription] = useState({
         appId: '',
         cost: '',
@@ -17,6 +18,7 @@ const AddSubscriptionPage = () => {
         reminderEnabled: false,
         subscriptionPeriod: '',
         reminderDate: '',
+        reminderDays: 3,
     });
 
     const formatDate = (dateString) => {
@@ -30,6 +32,11 @@ const AddSubscriptionPage = () => {
 
     const [isEditMode, setIsEditMode] = useState(!!existingSubscription);
     useEffect(() => {
+        // Check if the user is premium
+        const premiumStatus = JSON.parse(localStorage.getItem('isPremiumUser'));
+        setIsPremiumUser(premiumStatus);
+
+
         if (existingSubscription) {
             setIsEditMode(true);
             setSubscription({
@@ -68,7 +75,6 @@ const AddSubscriptionPage = () => {
     
             // Convert total time difference to months
             const totalMonths = years * 12 + months;
-            console.log("Subscirption Months - ",totalMonths);
             return totalMonths;
         }
         return '';
@@ -146,16 +152,51 @@ const AddSubscriptionPage = () => {
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setSubscription((prev) => ({
-            ...prev,
-            [name]: type === 'checkbox' ? checked : value,
-            ...(name === 'renewalDate' && {
-                subscriptionPeriod: calculateSubscriptionPeriod(subscription.subscriptionDate, value),
-            }),
-            ...(name === 'subscriptionDate' && {
-                subscriptionPeriod: calculateSubscriptionPeriod(value, subscription.renewalDate),
-            }),
-        }));
+    
+        setSubscription((prev) => {
+            // Handle changes based on user premium status
+            if (name === "reminderEnabled" && checked) {
+                // Reminder checkbox is checked
+                if (!isPremiumUser) {
+                    // Non-premium user: set default reminderDays to 3 and calculate reminderDate
+                    const calculatedReminderDate = calculateReminderDate(prev.renewalDate, 3);
+                    return {
+                        ...prev,
+                        reminderEnabled: true,
+                        reminderDays: 3,
+                        reminderDate: calculatedReminderDate
+                    };
+                } else {
+                    // Premium user: allow changing reminderDays
+                    return { ...prev, reminderEnabled: true };
+                }
+            } else if (name === "reminderEnabled" && !checked) {
+                // Reminder checkbox is unchecked
+                return { ...prev, reminderEnabled: false, reminderDays: '', reminderDate: '' };
+            } else if (name === "reminderDays") {
+                // Calculate reminderDate whenever reminderDays is changed (only for premium users)
+                const days = parseInt(value, 10);
+                const calculatedReminderDate = calculateReminderDate(prev.renewalDate, days);
+                return {
+                    ...prev,
+                    reminderDays: value,
+                    reminderDate: calculatedReminderDate
+                };
+            }
+    
+            return {
+                ...prev,
+                [name]: type === 'checkbox' ? checked : value,
+            };
+        });
+    };
+
+    // Helper function to calculate reminder date
+    const calculateReminderDate = (renewalDate, daysBefore) => {
+        if (!renewalDate || isNaN(daysBefore)) return '';
+        const renewal = new Date(renewalDate);
+        renewal.setDate(renewal.getDate() - daysBefore);
+        return renewal.toISOString().split('T')[0];
     };
 
     const handleSubmit = async (e) => {
@@ -234,7 +275,7 @@ const AddSubscriptionPage = () => {
                     <>
                         <label>
                             Reminder Days Before Renewal:
-                            <input type="number" name="reminderDays" value={subscription.reminderDays} onChange={handleChange} min="1" max="7" />
+                            <input type="number" name="reminderDays" value={subscription.reminderDays} onChange={handleChange} min="1" max="7" disabled={!isPremiumUser}/>
                         </label>
                         <label>
                             Reminder Date:

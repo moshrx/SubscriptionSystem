@@ -13,5 +13,25 @@ const getUserById = async (req, res) => {
     }
 };
 
+const updateUserPremiumStatus = async (req, res) => {
+    const { userId, isPremium, subscriptionDate, renewalDate } = req.body;
+    try {
+        await User.findOneAndUpdate(
+            { userId },
+            {
+                isPremium,
+                subscriptionDate,
+                renewalDate,
+                updatedAt: new Date(),
+            },
+            { new: true }
+        );
+        res.status(200).json({ message: 'User status updated successfully.' });
+    } catch (error) {
+        console.error('Error updating user status:', error);
+        res.status(500).json({ message: 'Failed to update user status.' });
+    }
+};
+
 // Export the function
-module.exports = { getUserById };
+module.exports = { getUserById, updateUserPremiumStatus };

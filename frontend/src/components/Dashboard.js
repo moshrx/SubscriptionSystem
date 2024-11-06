@@ -30,13 +30,10 @@ const Dashboard = ({ userName }) => {
             const userData = await getUserDetails(userId, token); // Call getUserDetails directly
             setUsername(userData.name);
             setIsPremium(userData.isPremium);
-            console.log(userId);
             
-    
             const subscriptionsData = await getUserSubscriptions(userId, token); // Call getUserSubscriptions directly
             setSubscriptions(subscriptionsData);
 
-            console.log(userId, userData);
             
         } catch (error) {
             console.error('Error fetching user data:', error);
@@ -45,8 +42,6 @@ const Dashboard = ({ userName }) => {
         }
     };
     
-
-    const isBasicUserMaxedOut = () => !isPremium && subscriptions.length >= 3;
 
     if (isLoading) {
         return <div>Loading...</div>;

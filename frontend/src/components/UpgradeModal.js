@@ -1,7 +1,16 @@
 import React from 'react';
 import '../styles/upgradeModal.css';
+import { useNavigate } from 'react-router-dom';
+
+
 
 const UpgradeModal = ({ isOpen, onClose }) => {
+    const navigate = useNavigate();
+
+    const handleUpgradeClick = () => {
+        navigate('/payments');
+    };
+
     if (!isOpen) return null; // Only render if modal is open
 
     return (
@@ -33,7 +42,7 @@ const UpgradeModal = ({ isOpen, onClose }) => {
                         <p className="price">$9.99<br/><span>/mo billed monthly</span></p>
                     </div>
                 </div>
-                <button className="btn-upgrade" onClick={() => alert("Upgrade process here")}>Upgrade</button> {/* Central Upgrade button */}
+                <button className="btn-upgrade" onClick={handleUpgradeClick}>Upgrade</button>
             </div>
         </div>
     );
