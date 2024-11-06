@@ -1,36 +1,32 @@
 import React, { useState, useEffect } from 'react';
-import { getUserDetails } from '../api'; // Import getUserDetails from api.js
+import { getUserDetails } from '../api';
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
-    const [isPremium, setIsPremium] = useState(null);
-    const userId = localStorage.getItem('userId'); // Ensure userId is stored in localStorage on login
-    const token = localStorage.getItem('token');   // Ensure token is stored in localStorage on login
+    const [isPremium, setIsPremium] = useState(localStorage.getItem('isPremiumUser') === 'true');
+    const userId = localStorage.getItem('userId');
+    const token = localStorage.getItem('token');
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            if (!userId || !token) {
-                console.warn("User ID or token not found in localStorage.");
-                return;
-            }
-
-            try {
-                // Use the getUserDetails function to retrieve the user data
-                const userData = await getUserDetails(userId, token);
-                console.log("Fetched user data:", userData); // Debugging log
-                setIsPremium(userData.isPremium);
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
+        
+        const handleStorageChange = () => {
+            setIsPremium(localStorage.getItem("isPremiumUser") === "true");
         };
 
-        fetchUserData();
+        window.addEventListener("storage", handleStorageChange);
+        return () => window.removeEventListener("storage", handleStorageChange);
     }, [userId, token]);
+
+    const handleUpgradeClick = () => {
+        navigate('/payments');
+    };
 
     return (
         <header
             style={{
-                backgroundColor: '#990011', // Dark Red
-                color: '#FCF6F5', // Light Color
+                backgroundColor: '#990011',
+                color: '#FCF6F5',
                 padding: '1rem',
                 textAlign: 'center',
                 position: 'relative',
@@ -38,7 +34,7 @@ const Header = () => {
         >
             <h1 style={{ margin: 0, fontSize: '2rem' }}>Snail Mail</h1>
 
-            {isPremium === false && (
+            {!isPremium && (
                 <button
                     style={{
                         position: 'absolute',
@@ -52,7 +48,7 @@ const Header = () => {
                         cursor: 'pointer',
                         fontSize: '1rem',
                     }}
-                    onClick={() => alert('Upgrade functionality here')}
+                    onClick={handleUpgradeClick}
                 >
                     Upgrade to Premium
                 </button>

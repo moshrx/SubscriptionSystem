@@ -44,7 +44,7 @@ const ChartPage = ({ userId, token }) => {
 
             try {
                 const data = await getDashboardDetails(storedUserId, token);
-                console.log(data); // Log the entire response
+                //console.log(data); // Log the entire response
 
                 if (!data || !data.subscriptions || !data.apps || !data.totalExpense) {
                     console.error('Expected data is missing or empty:', data);
@@ -82,7 +82,7 @@ const ChartPage = ({ userId, token }) => {
         ],
     };
 
-    console.log('Chart Data:', chartData); // Log the final chart data
+    //console.log('Chart Data:', chartData); // Log the final chart data
 
     return (
         <div className="chart-page">

@@ -7,6 +7,7 @@ const userSchema = new mongoose.Schema({
   password: {type: String, required: true},
   isPremium: {type: Boolean, default: false},
   subscriptionDate: {type: Date, default: null},
+  renewalDate: { type: Date, default: null },
   updatedAt: {type: Date, default: Date.now},
   createdAt: {type: Date, default: Date.now},
   resetPasswordToken: { type: String , default: null }, 

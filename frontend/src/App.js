@@ -11,6 +11,7 @@ import './App.css'; // Import the CSS file
 import ForgotPassword from './components/ForgotPassword';
 import ResetPasswordForm from './components/ResetPasswordForm';
 import AddSubscription from './components/AddSubscription';
+import PaymentsPage from './components/PaymentsPage';
 
 const AppContent = () => {
     const [auth, setAuth] = useState(null);
@@ -41,18 +42,14 @@ const AppContent = () => {
                         <Route path='/forgot-password' element={<ForgotPassword />} />
                         <Route path='/reset-password/:token' element={<ResetPasswordForm />} />
 
-                        <Route
-                            path="/dashboard"
-                            element={isAuthenticated() ? <Dashboard /> : <Navigate to="/login" />}
-                        />
-                        <Route
-                            path="/subscriptions"
-                            element={isAuthenticated() ? <Subscription /> : <Navigate to="/login" />}
-                        />
+                        <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/subscriptions" element={ <Subscription /> } />
 
                         <Route path="/add-subscription" element={<AddSubscription />} />
 
                         <Route path="/" element={<Navigate to="/login" />} />
+
+                        <Route path="/payments" element={<PaymentsPage />} />
                     </Routes>
                 </div>
             </div>
