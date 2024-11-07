@@ -18,6 +18,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
+    font-family: 'Montserrat', sans-serif;
 }
 
 /* Title styling */
@@ -34,14 +35,31 @@ h3 {
 }
 
 /* Radio button group styling */
-.radio-group {
+.radio-group-container {
     display: flex;
-    justify-content: center;
-    gap: 15px;
+    flex-direction: column;
+    align-items: center;
     margin: 20px 0;
 }
 
-.radio-group label {
+.group-label {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.radio-group {
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+    padding: 10px;
+    border: 1px solid #d1d1d1;
+    border-radius: 5px;
+    width: fit-content;
+}
+
+.radio-label {
     display: flex;
     align-items: center;
     font-size: 1rem;
@@ -64,6 +82,11 @@ h3 {
     font-size: 1rem;
     margin-top: 20px;
     transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.button-disabled {
+    cursor: not-allowed;
 }
 
 .pay-now-button:hover {
@@ -123,25 +146,100 @@ h3 {
     position: fixed;
     top: 20px;
     right: 20px;
-    background-color: #93fd8b; /* Green for success */
+    background-color: #28a745; /* Bright green for visibility */
     color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 15px 25px;
+    border-radius: 8px;
     font-family: Montserrat, sans-serif;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    font-size: 1rem; /* Larger font for readability */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
     z-index: 1000;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Add a success icon */
+.success-toast-notification::before {
+    content: '✔'; /* Success icon */
+    font-size: 1.5rem;
+}
+
+/* Visible state */
+.success-toast-visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .failed-toast-notification {
     position: fixed;
     top: 20px;
     right: 20px;
-    background-color: #f75b70;
+    background-color: #e63946; /* Bold red for failure */
     color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 15px 25px;
+    border-radius: 8px;
     font-family: Montserrat, sans-serif;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    font-size: 1rem; /* Larger font for visibility */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 10px;
     z-index: 1000;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
 }
+
+/* Add a failure icon */
+.failed-toast-notification::before {
+    content: '✖'; /* Cross icon for failure */
+    font-size: 1.5rem;
+}
+
+/* Visible state */
+.failed-toast-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.premium-benefits {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.premium-benefits h2 {
+    font-size: 1.8em;
+    color: #990011;
+}
+
+.premium-benefits ul {
+    list-style-type: none;
+    padding: 0;
+    font-size: 1em;
+    color: #333;
+}
+
+.premium-benefits li {
+    margin-bottom: 10px;
+    text-align : left;
+    padding-left: 40px;
+    padding-right:10px;
+}
+
+.payment-form {
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
 

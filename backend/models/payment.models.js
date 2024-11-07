@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 
 const paymentSchema = new mongoose.Schema({
   paymentId: {
-    type: Number,
+    type: String,
     required: true,
     unique: true
   },
   userId: {
-    type: Number,
+    type: String,
     required: true
   },
   amountPaid: {
@@ -19,7 +19,7 @@ const paymentSchema = new mongoose.Schema({
     required: true
   },
   transactionId: {
-    type: Number,
+    type: String,
     required: true
   }
 });

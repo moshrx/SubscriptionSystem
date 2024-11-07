@@ -25,6 +25,7 @@ const CheckoutForm = () => {
     const [loading, setLoading] = useState(false); // Loading state
     const costPerMonth = 9.99;
     const totalAmount = (duration * costPerMonth).toFixed(2);
+    const [isPaymentCompleted, setIsPaymentCompleted] = useState(false);
 
     const handleDurationChange = (event) => {
         setDuration(Number(event.target.value));
@@ -51,16 +52,25 @@ const CheckoutForm = () => {
             });
 
             if (error) {
-                console.error('Payment error:', error);
-                showFailedToastNotification('Payment failed. Please try again.');
+                // Log the error message
+                console.error('Payment error:', error.message);
+    
+                // Check for specific Stripe error codes to provide clearer feedback
+                if (error.type === 'card_error' || error.type === 'validation_error') {
+                    showFailedToastNotification(`Payment failed: ${error.message}`);
+                } else {
+                    showFailedToastNotification('Payment failed due to a technical issue. Please try again.');
+                }
                 navigate('/payments');
                 setLoading(false);
             } else if (paymentIntent.status === 'succeeded') {
+
+                setIsPaymentCompleted(true);
                 showSuccessToastNotification("Payment successful! Welcome to Premium!");
 
-            const subscriptionDate = new Date();
-            const renewalDate = new Date();
-            renewalDate.setMonth(renewalDate.getMonth() + duration);
+                const subscriptionDate = new Date();
+                const renewalDate = new Date();
+                renewalDate.setMonth(renewalDate.getMonth() + duration);
 
                 setTimeout(async () => {
                     await fetch('http://localhost:5000/api/users/update-premium-status', {
@@ -88,60 +98,89 @@ const CheckoutForm = () => {
         notification.className = "success-toast-notification";
         notification.innerText = message;
         document.body.appendChild(notification);
-        setTimeout(() => notification.remove(), 3000);
+        setTimeout(() => notification.classList.add("success-toast-visible"), 10);
+
+        setTimeout(() => {
+            notification.classList.remove("success-toast-visible");
+            setTimeout(() => notification.remove(), 300);
+        }, 3000); // 3 seconds visible time
     };
 
     const showFailedToastNotification = (message) => {
         const notification = document.createElement("div");
         notification.className = "failed-toast-notification";
         notification.innerText = message;
+    
         document.body.appendChild(notification);
-        setTimeout(() => notification.remove(), 3000);
+    
+        // Trigger transition by adding visible class after append
+        setTimeout(() => notification.classList.add("failed-toast-visible"), 10);
+    
+        setTimeout(() => {
+            notification.classList.remove("failed-toast-visible");
+            setTimeout(() => notification.remove(), 300);
+        }, 3000); // 3 seconds visible time
     };
 
     return (
-        <form onSubmit={handleSubmit} className="payment-page">
-            <h2>Select Your Subscription Duration</h2>
-            <div className="radio-group">
-                {[1, 3, 6, 9, 12].map((months) => (
-                    <label key={months}>
-                        <input
-                            type="radio"
-                            name="duration"
-                            value={months}
-                            checked={duration === months}
-                            onChange={handleDurationChange}
-                        />
-                        {months} {months === 1 ? 'month' : 'months'}
-                    </label>
-                ))}
+        <div className="payment-page">
+            <div className="premium-benefits">
+                <h2>Unlock Premium Benefits</h2>
+                <p>Upgrade now and enjoy the following features:</p>
+                <br/>
+                <ul>
+                    <li>✓ Unlimited subscription management</li>
+                    <li>✓ Customizable renewal reminders</li>
+                    <li>✓ Priority support and early access to new features</li>
+                </ul>
             </div>
 
-            <h3>Total: ${totalAmount}</h3>
+            <form onSubmit={handleSubmit} className="payment-form">
+                <h3>Select Your Subscription Duration</h3>
+                <div className="radio-group-container">
+                    <label className="group-label">Months</label>
+                    <div className="radio-group">
+                        {[1, 3, 6, 9, 12].map((months) => (
+                            <label key={months} className="radio-label">
+                                <input
+                                    type="radio"
+                                    name="duration"
+                                    value={months}
+                                    checked={duration === months}
+                                    onChange={handleDurationChange}
+                                />
+                                {months}
+                            </label>
+                        ))}
+                    </div>
+                </div>
 
-            <CardElement
-                className="StripeElement"
-                options={{
-                    style: {
-                        base: {
-                            fontSize: '16px',
-                            color: '#424770',
-                            '::placeholder': { color: '#aab7c4' },
+                <h4>Total Amount Due: ${totalAmount}</h4>
+
+                <CardElement
+                    className="StripeElement"
+                    options={{
+                        style: {
+                            base: {
+                                fontSize: '16px',
+                                color: '#424770',
+                                '::placeholder': { color: '#aab7c4' },
+                            },
+                            invalid: { color: '#9e2146' },
                         },
-                        invalid: { color: '#9e2146' },
-                    },
-                }}
-            />
-            <button
-                type="submit"
-                disabled={!stripe}
-                className="pay-now-button"
-            >
-                Pay ${totalAmount}
-            </button>
+                    }}
+                />
+                <button
+                    type="submit"
+                    disabled={!stripe || loading || isPaymentCompleted}
+                    className={`pay-now-button ${loading || isPaymentCompleted ? 'button-disabled' : ''}`}
+                >
+                    Pay ${totalAmount}
+                </button>
 
-            {loading && <div className="loading-screen">Processing payment...</div>}
-        </form>
+                {loading && <div className="loading-screen">Processing payment...</div>}
+            </form>
+        </div>
     );
 };
 
