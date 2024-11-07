@@ -35,8 +35,6 @@ const sendReminderEmails = async () => {
 
       // Skip if user email not found
       if (!user || !user.email) continue;
-
-      console.log(subscription);
       
       // Find application associated with the subscription
       const application = await Application.findOne({ appId: subscription.appId });
