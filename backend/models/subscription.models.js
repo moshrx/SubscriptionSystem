@@ -39,6 +39,10 @@ const subscriptionSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  }, 
+  inActive: {
+    type: Boolean,
+    default: false
   }
 });
 

@@ -14,6 +14,7 @@ import AddSubscription from './components/AddSubscription';
 import PaymentsPage from './components/PaymentsPage';
 import ExplorePage from './components/ExplorePage';
 import ContactUs from './components/ContactUs';
+import DeactivatedSubscriptions from './components/DeactivatedSubscriptions';
 
 const AppContent = () => {
     const [auth, setAuth] = useState(null);
@@ -48,6 +49,7 @@ const AppContent = () => {
                         <Route path="/subscriptions" element={<Subscription />} />
 
                         <Route path="/add-subscription" element={<AddSubscription />} />
+                        <Route path="deactivated-apps" element={<DeactivatedSubscriptions />} />
 
                         <Route path="/" element={<Navigate to="/login" />} />
 

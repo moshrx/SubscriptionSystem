@@ -16,12 +16,13 @@ const subscriptions = async (req, res) => {
         // Check Redis cache
         const cachedSubscriptions = await client.get(cacheKey);
         if (cachedSubscriptions) {
-            console.log('Serving from cache');
+            console.log('Serving from cache:');
             return res.json(JSON.parse(cachedSubscriptions));
         }
+        
 
         // Fetch from database if not cached
-        const subscriptions = await Subscription.find({ userId: String(userId) });
+        const subscriptions = await Subscription.find({ userId: String(userId), inActive: false });
 
         // Cache the result in Redis with an expiry of 1 hour (3600 seconds)
         await client.setEx(cacheKey, 3600, JSON.stringify(subscriptions));
@@ -125,6 +126,54 @@ const updateSubscription = async (req, res) => {
     }
 };
 
+const getDeactivatedApps = async (req, res) => {
+    const { userId } = req.params;
+    try {
+        // Find deactivated subscriptions for the user
+        const subscriptions = await Subscription.find({ userId, inActive: true });
+
+        if (!subscriptions || subscriptions.length === 0) {
+            return res.json({ apps: [], message: 'No Deactivated Apps' });
+        }
+
+        // Fetch application details
+        const appIds = subscriptions.map(sub => sub.appId);
+        const apps = await Application.find({ appId: { $in: appIds } });
+
+        const today = new Date();
+
+        // Map subscriptions with app names, duration, and formatted cost
+        const appData = subscriptions.map(subscription => {
+            const app = apps.find(app => app.appId === subscription.appId);
+            const appName = app ? app.appName : 'Unknown App';
+
+            // Calculate duration in months between subscriptionDate and renewalDate
+            const subscriptionDate = new Date(subscription.subscriptionDate);
+            const renewalDate = new Date(subscription.renewalDate);
+            const durationMonths = Math.max(0, (renewalDate.getFullYear() - subscriptionDate.getFullYear()) * 12 + renewalDate.getMonth() - subscriptionDate.getMonth());
+
+            // Convert cost to string if necessary
+            const cost = subscription.cost instanceof Object ? subscription.cost.toString() : subscription.cost;
+
+            return {
+                subscriptionId: subscription.subscriptionId,
+                appName,
+                cost,
+                duration: `${durationMonths} months`,
+                subscriptionDate: subscriptionDate.toLocaleDateString(),
+                renewalDate: renewalDate.toLocaleDateString(),
+            };
+        });
+
+        res.json(appData);
+    } catch (error) {
+        console.error('Error fetching deactivated apps:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+
+
 //get all applications list
 const getApps = async (req, res) => {
     try {
@@ -174,6 +223,8 @@ const deactivateSubscription = async (req, res) => {
         // Deactivate the subscription by updating the required fields
         subscription.reminderDate = null;
         subscription.reminderEnabled = false;
+        subscription.inActive = true;
+
 
         // Save the updated subscription
         await subscription.save();
@@ -191,7 +242,8 @@ const getDashboardData = async (req, res) => {
 
         // Check cache first
         const cacheKey = `dashboard:${userId}`;
-        const cachedDashboardData = await client.get(cacheKey);
+        const cachedDashboardData = await client.del(cacheKey); // Clear cache to ensure fresh data
+
 
         if (cachedDashboardData) {
             // If data is cached, return it directly
@@ -200,8 +252,7 @@ const getDashboardData = async (req, res) => {
         }
 
         // Find subscriptions for the user
-        const subscriptions = await Subscription.find({ userId, reminderEnabled: true,  reminderDate: { $ne: null, $gt: new Date() },
-        renewalDate: { $ne: null, $gt: new Date()}, });
+        const subscriptions = await Subscription.find({ userId, inActive: false });
 
         if (!subscriptions || subscriptions.length === 0) {
             return res.json({ subscriptions: [], message: 'No subscriptions found for this user' });
@@ -263,6 +314,6 @@ const getDashboardData = async (req, res) => {
     }
 };
 
-module.exports = { subscriptions, addSubscription, updateSubscription, getApps, deactivateSubscription, getDashboardData };
+module.exports = { subscriptions, addSubscription, updateSubscription, getApps, deactivateSubscription, getDashboardData, getDeactivatedApps };
 
 
