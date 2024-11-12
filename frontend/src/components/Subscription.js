@@ -13,25 +13,52 @@ const Subscription = () => {
     const isPremiumUser = localStorage.getItem('isPremiumUser') === 'true';
 
     const handleAddSubscription = async () => {
-       // Fetch the current count of subscriptions for the user
-       try {
-        const response = await fetch(`http://localhost:5000/api/subscription/subscriptionCount?userId=${userId}`);
-        if (!response.ok) {
-            throw new Error('Failed to fetch subscription count');
-        }
-        const { subscriptionCount } = await response.json();
+        try {
+            const response = await fetch(`http://localhost:5000/api/subscription/subscriptionCount?userId=${userId}`);
+            if (!response.ok) {
+                throw new Error('Failed to fetch subscription count');
+            }
+            const { subscriptionCount } = await response.json();
 
-        // Check if the user has reached the subscription limit
-        if (!isPremiumUser && subscriptionCount >= 5) {
-            setModalOpen(true); // Show modal if the user is not premium and has reached the limit
-        } else {
-            navigate('/add-subscription');
+            if (!isPremiumUser && subscriptionCount >= 5) {
+                setModalOpen(true);
+            } else {
+                navigate('/add-subscription');
+            }
+        } catch (error) {
+            console.error("Error fetching subscription count:", error);
         }
-    } catch (error) {
-        console.error("Error fetching subscription count:", error);
-    }
     };
 
+    const handleDeactivate = async (subscriptionId) => {
+        // Show confirmation prompt before deactivating
+        const isConfirmed = window.confirm("Are you sure you want to deactivate this subscription?");
+    
+        if (isConfirmed) {
+            try {
+                const response = await fetch(`http://localhost:5000/api/subscription/deactivate/${subscriptionId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    alert(data.message); // Show success message
+                    // Refresh the subscriptions after deactivation
+                    setSubscriptions(prevState =>
+                        prevState.filter(subscription => subscription.subscriptionId !== subscriptionId)
+                    );
+                } else {
+                    alert(data.message); // Show error message
+                }
+            } catch (error) {
+                console.error("Error deactivating subscription:", error);
+                alert("Error deactivating subscription");
+            }
+        }
+    };
+    
     const handleEditSubscription = (subscription) => {
         navigate('/add-subscription', { state: { existingSubscription: subscription } });
     };
@@ -41,11 +68,10 @@ const Subscription = () => {
     };
 
     const handleUpgrade = () => {
-        //navigate('/upgrade'); // Navigate to upgrade page or prompt upgrade process
+        // navigate('/upgrade'); // Navigate to upgrade page or prompt upgrade process
     };
 
     useEffect(() => {
-        // Fetch subscriptions from the backend
         fetch(`http://localhost:5000/api/subscription/subscriptions?userId=${userId}`)
             .then(response => {
                 if (!response.ok) {
@@ -54,10 +80,9 @@ const Subscription = () => {
                 return response.json();
             })
             .then(data => {
-                // Map the data to parse cost if it's an object
                 const parsedSubscriptions = data.map(subscription => ({
                     ...subscription,
-                    cost: subscription.cost?.$numberDecimal || subscription.cost // Convert cost to a readable format
+                    cost: subscription.cost?.$numberDecimal || subscription.cost
                 }));
                 setSubscriptions(parsedSubscriptions);
             })
@@ -68,7 +93,7 @@ const Subscription = () => {
                 setIsLoading(false);
             });
 
-            fetch('http://localhost:5000/api/subscription/apps')
+        fetch('http://localhost:5000/api/subscription/apps')
             .then(response => response.json())
             .then(appsData => setApplications(appsData))
             .catch(error => console.error('Error fetching apps:', error));
@@ -84,7 +109,7 @@ const Subscription = () => {
     }
 
     return (
-        <div className="subscription-table">
+        <div className="subscription-cards">
             <h2>Your Subscriptions</h2>
 
             <button onClick={handleAddSubscription} className="btn btn-primary">
@@ -92,34 +117,26 @@ const Subscription = () => {
             </button>
             <UpgradeModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>App ID</th>
-                        <th>Cost</th>
-                        <th>Subscription Date</th>
-                        <th>Renewal Date</th>
-                        <th>Reminder Date</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {subscriptions.map((subscription) => (
-                        <tr key={subscription.subscriptionId}>
-                            <td data-label="App Name">{getAppName(subscription.appId)}</td>
-                            <td data-label="Cost">{subscription.cost}</td>
-                            <td data-label="Subscription Date">{new Date(subscription.subscriptionDate).toLocaleDateString()}</td>
-                            <td data-label="Renewal Date">{new Date(subscription.renewalDate).toLocaleDateString()}</td>
-                            <td data-label="Reminder Date">
-                                {subscription.reminderDate ? new Date(subscription.reminderDate).toLocaleDateString() : '-'}    
-                            </td>
-                            <td data-label="Actions">
-                                <button onClick={() => handleEditSubscription(subscription)} className="btn btn-secondary">Edit</button> {/* Edit button */}
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <div className="cards-container">
+                {subscriptions.map((subscription) => (
+                    <div key={subscription.subscriptionId} className="subscription-card">
+                        <h3>{getAppName(subscription.appId)}</h3>
+                        <p><strong>Cost:</strong> {subscription.cost}</p>
+                        <p><strong>Subscription Date:</strong> {new Date(subscription.subscriptionDate).toLocaleDateString()}</p>
+                        <p><strong>Renewal Date:</strong> {new Date(subscription.renewalDate).toLocaleDateString()}</p>
+                        <p><strong>Reminder Date:</strong> {subscription.reminderDate ? new Date(subscription.reminderDate).toLocaleDateString() : '-'}</p>
+
+                        <div className="actions">
+                            <button onClick={() => handleEditSubscription(subscription)} className="btn btn-secondary">
+                                Edit
+                            </button>
+                            <button onClick={() => handleDeactivate(subscription.subscriptionId)} className="btn btn-deactivate">
+                                Deactivate
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };

@@ -1,0 +1,54 @@
+.contact-us {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #FCF6F5;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  .contact-us h2 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    color: #990011;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  .contact-us .contact-info {
+    margin-top: 20px;
+  }
+  
+  .contact-us h3 {
+    margin-top: 20px;
+    font-size: 22px;
+    color: #990011;
+    font-weight: bold;
+  }
+  
+  .contact-us p {
+    font-size: 16px;
+    color: #333;
+    margin: 10px 0;
+  }
+  
+  .contact-us a {
+    color: #990011;
+    text-decoration: none;
+  }
+  
+  .contact-us a:hover {
+    text-decoration: underline;
+  }
+  
+  .contact-us ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  .contact-us ul li {
+    margin-bottom: 10px;
+  }
+  

@@ -264,101 +264,105 @@ body {
   color: white; /* Text color for headers */
 }
 
-
 .dashboard {
-    padding: 20px;
-    font-family: Arial, sans-serif;
+  padding: 20px;
+  font-family: Arial, sans-serif;
 }
 
 .dashboard-widgets {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .chart-page {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+display: flex;
+flex-direction: column;
+gap: 20px;
+padding: 20px;
 }
 
 .dashboard-overview {
-  display: flex;
-  gap: 20px;
-  justify-content: space-between;
-}
-
-
-
-.chart-page {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  padding: 20px;
-}
-
-.dashboard-overview {
-  display: flex;
-  gap: 20px;
-  justify-content: space-between;
-  flex-wrap: wrap; /* Allows wrapping for smaller screens */
+display: flex;
+gap: 20px;
+justify-content: space-between;
+flex-wrap: wrap; /* Allows wrapping for smaller screens */
 }
 
 .widget {
-  flex: 1 1 300px; /* Flexible width with a minimum of 300px */
-  background-color: #ffffff;
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s, box-shadow 0.3s; /* Smooth hover effects */
+flex: 1 1 300px; /* Flexible width with a minimum of 300px */
+background-color: #ffffff;
+padding: 20px;
+border-radius: 10px;
+text-align: center;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+transition: transform 0.3s, box-shadow 0.3s; /* Smooth hover effects */
 }
 
 .widget:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+transform: translateY(-5px);
+box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .widget h3 {
-  font-size: 1.2em;
-  color: #990011; /* Header color */
+font-size: 1.2em;
+color: #990011; /* Header color */
 }
 
 .widget p {
-  font-size: 1.5em;
-  margin: 10px 0;
-  font-weight: bold;
-  color: #333; /* Text color */
+font-size: 1.5em;
+margin: 10px 0;
+font-weight: bold;
+color: #333; /* Text color */
 }
 
 .upcoming-renewal-link {
-  text-decoration: none;
-  color: inherit; /* Inherit color from widget */
+text-decoration: none;
+color: inherit; /* Inherit color from widget */
 }
 
 .dashboard-charts {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
+display: grid;
+grid-template-columns: 1fr; /* Single column by default */
+gap: 20px;
 }
 
 .chart-container {
-  background-color: #ffffff;
-  padding: 20px; /* Reduced padding for charts */
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  height: 300px; /* Consistent height for all charts */
+background-color: #ffffff;
+padding: 20px;
+border-radius: 10px;
+box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+height: auto; /* Let height adjust based on content */
+display: flex;
+flex-direction: column;
+align-items: center;
 }
 
 .chart-container h3 {
-  margin-bottom: 15px; /* Space for the chart title */
-  font-size: 1.5em; /* Increase title font size */
-  color: #990011; /* Header color */
+margin-bottom: 15px;
+font-size: 1.5em;
+color: #990011;
+}
+
+.chart-container canvas {
+max-width: 100%; /* Makes the chart responsive */
+max-height: 400px; /* Limit the height for larger screens */
 }
 
 /* Add media queries for responsiveness */
+@media (min-width: 768px) {
+.dashboard-charts {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Two columns on larger screens */
+}
+}
+
 @media (max-width: 768px) {
-  .dashboard-overview {
-      flex-direction: column; /* Stack widgets on smaller screens */
-  }
+.dashboard-overview {
+    flex-direction: column; /* Stack widgets on smaller screens */
+}
+
+.chart-container {
+    padding: 15px; /* Reduced padding for smaller screens */
+    height: auto; /* Adjust height based on content */
+}
 }
