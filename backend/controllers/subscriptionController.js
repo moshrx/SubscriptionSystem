@@ -196,7 +196,7 @@ const getDashboardData = async (req, res) => {
         if (cachedDashboardData) {
             // If data is cached, return it directly
             console.log('Serving from cache');
-            return res.json(cachedDashboardData);
+            return res.json(JSON.parse(cachedDashboardData));
         }
 
         // Find subscriptions for the user
