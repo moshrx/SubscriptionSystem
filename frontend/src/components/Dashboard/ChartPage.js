@@ -6,20 +6,16 @@ import {
     Chart as ChartJS,
     CategoryScale,
     LinearScale,
-    BarElement,
     ArcElement,
     Tooltip,
     Legend,
 } from 'chart.js';
-import { Bar, Pie } from 'react-chartjs-2';
+import { Pie } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels'; // Import the data labels plugin
-import Subscription from '../Subscription';
-import { colors } from '@mui/material';
 
 ChartJS.register(
     CategoryScale,
     LinearScale,
-    BarElement,
     ArcElement,
     Tooltip,
     Legend,
@@ -31,8 +27,8 @@ const ChartPage = ({ userId, token }) => {
     const [apps, setApps] = useState([]);
     const [totalExpense, setTotalExpense] = useState(0);
     const [mostExpensiveApp, setMostExpensiveApp] = useState('');
-    const [latestRenewalDate, setLatestRenewalDate] = useState('');
-    const [latestRenewalAppName, setLatestRenewalAppName] = useState('');
+    const [upcomingRenewalDate, setUpcomingRenewalDate] = useState('');
+    const [upcomingRenewalAppName, setUpcomingRenewalAppName] = useState('');
 
     useEffect(() => {
         const storedUserId = localStorage.getItem('userId');
@@ -44,8 +40,6 @@ const ChartPage = ({ userId, token }) => {
 
             try {
                 const data = await getDashboardDetails(storedUserId, token);
-                //console.log(data); // Log the entire response
-
                 if (!data || !data.subscriptions || !data.apps || !data.totalExpense) {
                     console.error('Expected data is missing or empty:', data);
                     return;
@@ -55,8 +49,8 @@ const ChartPage = ({ userId, token }) => {
                 setApps(data.apps);
                 setTotalExpense(data.totalExpense);
                 setMostExpensiveApp(data.mostExpensiveApp || 'N/A');
-                setLatestRenewalDate(data.latestRenewalDate || 'N/A');
-                setLatestRenewalAppName(data.latestRenewalAppName || 'N/A');
+                setUpcomingRenewalDate(data.upcomingRenewalDate || 'N/A');
+                setUpcomingRenewalAppName(data.upcomingRenewalAppName || 'N/A');
             } catch (error) {
                 console.error("Error fetching dashboard details:", error);
             }
@@ -69,11 +63,10 @@ const ChartPage = ({ userId, token }) => {
         labels: apps.map(app => app.appName || app.appId), // Use app names or IDs
         datasets: [
             {
-                label: '',
+                label: 'Cost per Subscription',
                 data: apps.map(app => {
                     const subscription = subscriptions.find(sub => sub.appId === app.appId);
                     const cost = subscription ? (subscription.cost?.$numberDecimal ? parseFloat(subscription.cost.$numberDecimal) : 0) : 0;
-                    console.log(`App: ${app.appName}, Cost: $${cost}`); // Log each app's cost
                     return cost;
                 }),
                 backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#FF9F40', '#4BC0C0'],
@@ -81,8 +74,6 @@ const ChartPage = ({ userId, token }) => {
             },
         ],
     };
-
-    //console.log('Chart Data:', chartData); // Log the final chart data
 
     return (
         <div className="chart-page">
@@ -98,16 +89,28 @@ const ChartPage = ({ userId, token }) => {
                 <div className="widget">
                     <h3>Upcoming Renewal</h3>
                     <Link to="/subscriptions" className="upcoming-renewal-link">
-                        <p>{latestRenewalAppName || 'N/A'}</p>
-                        <p>{latestRenewalDate || 'N/A'}</p>
+                        <p>{upcomingRenewalAppName || 'N/A'}</p>
+                        <p>{upcomingRenewalDate || 'N/A'}</p>
                     </Link>
                 </div>
             </div>
 
             <div className="dashboard-charts">
                 <div className="chart-container">
-                    <h3 >Subscribed Applications</h3>
-                    <Bar data={chartData} options={{ indexAxis: 'x', maintainAspectRatio: false }} />
+                    <h3>Subscribed Applications (Cost Distribution)</h3>
+                    <Pie 
+                        data={chartData} 
+                        options={{ 
+                            plugins: {
+                                datalabels: {
+                                    color: '#fff',
+                                    formatter: (value, context) => `$${value.toFixed(2)}`,
+                                    font: { weight: 'bold' },
+                                },
+                            },
+                            maintainAspectRatio: false,
+                        }}
+                    />
                 </div>
             </div>
         </div>

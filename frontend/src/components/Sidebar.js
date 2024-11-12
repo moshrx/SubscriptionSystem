@@ -36,8 +36,8 @@ const Sidebar = ({ handleLogout }) => {
       case 'explore':
         navigate('/explore');
         break;
-      case 'products':
-        navigate('/products');
+      case 'Contact Us':
+        navigate('/contact-us');
         break;
       default:
         break;
@@ -72,8 +72,8 @@ const Sidebar = ({ handleLogout }) => {
             <ListItem button onClick={() => handleMenuClick('explore')} className="drawer-item">
               <ListItemText primary="Explore" />
             </ListItem>
-            <ListItem button onClick={() => handleMenuClick('products')} className="drawer-item">
-              <ListItemText primary="Products" />
+            <ListItem button onClick={() => handleMenuClick('Contact Us')} className="drawer-item">
+              <ListItemText primary="Contact Us" />
             </ListItem>
           </List>
 

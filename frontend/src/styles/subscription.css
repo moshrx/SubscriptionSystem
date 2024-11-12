@@ -1,25 +1,25 @@
-/* Subscription Table Container */
-.subscription-table {
+/* Subscription Cards Container */
+.subscription-cards {
     width: 90%;
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #FCF6F5; /* Background color for the table section */
-    border-radius: 10px; /* Rounded corners for the table */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    background-color: #FCF6F5; /* Background color for the whole section */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Montserrat', sans-serif;
 }
 
-/* Table Title */
-.subscription-table h2 {
+.subscription-cards h2 {
     margin-bottom: 20px;
-    font-size: 24px;
+    font-size: 28px; /* Bigger font size for the header */
     color: #990011;
     text-align: center;
+    font-weight: bold; /* Bold header */
 }
 
 /* Add Subscription Button */
-.subscription-table .btn-primary {
+.subscription-cards .btn-primary {
     background-color: #990011;
     color: white;
     border: none;
@@ -36,64 +36,135 @@
     margin-right: auto;
 }
 
-.subscription-table .btn-primary:hover {
+.subscription-cards .btn-primary:hover {
     background-color: #bb1122;
 }
 
-/* Table Styling */
-.subscription-table table {
-    width: 100%;
-    border-collapse: collapse;
+/* Cards Container */
+.cards-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
 }
 
-/* Table Headers */
-.subscription-table th {
-    background-color: #990011;
-    color: #FCF6F5;
-    padding: 15px;
-    text-align: left;
-    font-weight: bold;
+/* Subscription Card */
+.subscription-card {
+    background-color: #fff; /* White background for each card */
+    padding: 20px;
+    width: 280px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
 }
 
-/* Table Cells */
-.subscription-table td {
-    padding: 12px;
-    border: 1px solid #ddd;
-    color: #333;
+.subscription-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Alternate row colors for better readability */
-.subscription-table tr:nth-child(even) {
-    background-color: #f9f9f9;
+.subscription-card h3 {
+    font-size: 22px; /* Larger font size for the card header */
+    color: #990011;
+    margin-bottom: 10px;
+    font-weight: bold; /* Bold card header */
 }
 
-/* Table Hover Effect */
-.subscription-table tr:hover {
-    background-color: #f1e6e5;
+/* Conditional Background Colors */
+.subscription-card.premium {
+    background-color: #e0ffe0; /* Light green for premium users */
 }
 
-/* Responsive Table */
+.subscription-card.basic {
+    background-color: #ffe0e0; /* Light red for basic users */
+}
+
+.subscription-card.active {
+    background-color: #e0f7fa; /* Light cyan for active subscriptions */
+}
+
+.subscription-card.inactive {
+    background-color: #f0f0f0; /* Light gray for inactive subscriptions */
+}
+
+/* Action Buttons */
+.subscription-card .actions {
+    margin-top: 20px;
+}
+
+/* Edit Button */
+.subscription-card .btn-secondary {
+    background-color: #444;
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+    margin-right: 10px; /* Add space between Edit and Deactivate buttons */
+}
+
+.subscription-card .btn-secondary:hover {
+    background-color: #666;
+}
+
+/* Deactivate Button */
+.subscription-card .btn-danger {
+    background-color: #d9534f; /* Red color for deactivate button */
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.subscription-card .btn-danger:hover {
+    background-color: #c9302c;
+}
+
+/* Deactivate Button */
+.subscription-card .btn-deactivate {
+    background-color: #d9534f; /* Red color for deactivate */
+    color: white;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.subscription-card .btn-deactivate:hover {
+    background-color: #c9302c; /* Darker red on hover */
+}
+
+
+/* Responsive Design */
 @media (max-width: 768px) {
-    .subscription-table table,
-    .subscription-table th,
-    .subscription-table td {
-        display: block;
+    .cards-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .subscription-card {
+        width: 90%;
+    }
+
+    .subscription-card .btn-secondary,
+    .subscription-card .btn-danger {
+        width: 100%; /* Make the buttons take up full width on small screens */
+        margin-bottom: 10px; /* Add space between buttons */
+    }
+    .subscription-card .btn-deactivate {
         width: 100%;
-    }
-    .subscription-table th {
-        display: none;
-    }
-    .subscription-table td {
-        display: flex;
-        justify-content: space-between;
         padding: 10px;
-        border-bottom: 1px solid #ddd;
-    }
-    .subscription-table td:before {
-        content: attr(data-label);
-        font-weight: bold;
-        color: #990011;
-        flex: 1;
-        margin-right: 10px;
     }
 }

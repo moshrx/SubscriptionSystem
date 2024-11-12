@@ -83,4 +83,34 @@ const updateSubscription = async (req, res) => {
     }
 };
 
-module.exports = { addSubscription, updateSubscription };
+// Deactivate subscription
+const deactivateSubscription = async (req, res) => {
+    const { subscriptionId } = req.params;
+
+    try {
+        // Find the subscription by subscriptionId (UUID)
+        const subscription = await Subscription.findOne({ subscriptionId });
+
+        if (!subscription) {
+            return res.status(404).json({ message: 'Subscription not found' });
+        }
+
+        // Deactivate the subscription by updating the required fields
+        subscription.reminderDate = null;
+        subscription.reminderEnabled = false;
+
+        // Save the updated subscription
+        await subscription.save();
+
+        res.json({ message: 'Subscription deactivated successfully' });
+    } catch (error) {
+        console.error('Error deactivating subscription:', error);
+        res.status(500).json({ message: 'Error deactivating subscription', error });
+    }
+};
+
+
+
+
+
+module.exports = { addSubscription, updateSubscription, deactivateSubscription };

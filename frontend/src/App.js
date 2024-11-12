@@ -12,6 +12,8 @@ import ForgotPassword from './components/ForgotPassword';
 import ResetPasswordForm from './components/ResetPasswordForm';
 import AddSubscription from './components/AddSubscription';
 import PaymentsPage from './components/PaymentsPage';
+import ExplorePage from './components/ExplorePage';
+import ContactUs from './components/ContactUs';
 
 const AppContent = () => {
     const [auth, setAuth] = useState(null);
@@ -43,13 +45,15 @@ const AppContent = () => {
                         <Route path='/reset-password/:token' element={<ResetPasswordForm />} />
 
                         <Route path="/dashboard" element={<Dashboard />} />
-                        <Route path="/subscriptions" element={ <Subscription /> } />
+                        <Route path="/subscriptions" element={<Subscription />} />
 
                         <Route path="/add-subscription" element={<AddSubscription />} />
 
                         <Route path="/" element={<Navigate to="/login" />} />
 
                         <Route path="/payments" element={<PaymentsPage />} />
+                        <Route path="/explore" element={<ExplorePage />} /> {/* Corrected */}
+                        <Route path="/contact-us" element={<ContactUs />} />    
                     </Routes>
                 </div>
             </div>
@@ -58,7 +62,6 @@ const AppContent = () => {
         </>
     );
 };
-
 
 const App = () => {
     return (
