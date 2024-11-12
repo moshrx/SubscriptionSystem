@@ -1,7 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
 const User = require('../models/user.models');
-const { register, login, forgotPassword } = require('../controllers/authController');
+const { register, login, forgotPassword, logout } = require('../controllers/authController');
 
 const router = express.Router();
 
@@ -13,6 +13,9 @@ router.post('/login', login);
 
 // Forgot password route
 router.post('/forgot-password', forgotPassword);
+
+//Logout
+router.post('/logout/:userId',logout);
 
 // Reset password route
 router.post('/reset/:token', async (req, res) => {

@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
+const client = require('../config/redisClient');
 const dotenv = require("dotenv");
 dotenv.config();
 const { v4: uuidv4 } = require("uuid"); // Importing UUID version 4
@@ -120,4 +121,19 @@ const forgotPassword = async (req, res) => {
   }
 };
 
-module.exports = { register, login, forgotPassword };
+const logout = async(req, res) => {
+  const { userId } = req.params;
+
+  // Invalidate the user's dashboard cache
+  const cacheDashKey = `dashboard:${userId}`;
+  client.del(cacheDashKey);
+
+  //Invalidate user's subscriptions cache
+  const cacheSubKey = `subscriptions:${userId}`;
+  client.del(cacheSubKey);
+
+  // Send a response confirming logout
+  res.json({ message: 'Logout successful and cache cleared.' });
+};
+
+module.exports = { register, login, forgotPassword, logout };

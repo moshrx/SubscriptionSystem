@@ -86,7 +86,7 @@ const Register = () => {
             {/* Right section for the login form */}
             <div className="w-1/2 flex justify-center items-center h-screen bg-gray-100">
                 <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-md rounded-lg">
-                    <h2 className="text-2xl font-bold mb-6 text-center">
+                    <h2 className="text-2xl font-bold mb-6 text-center text-blue-500">
                         Create an Account
                     </h2>
                     <form onSubmit={(e) => handleSubmit(e)} className="space-y-4">

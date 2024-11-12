@@ -63,14 +63,6 @@ const Subscription = () => {
         navigate('/add-subscription', { state: { existingSubscription: subscription } });
     };
 
-    const handleCloseModal = () => {
-        setModalOpen(false);
-    };
-
-    const handleUpgrade = () => {
-        // navigate('/upgrade'); // Navigate to upgrade page or prompt upgrade process
-    };
-
     useEffect(() => {
         fetch(`http://localhost:5000/api/subscription/subscriptions?userId=${userId}`)
             .then(response => {

@@ -63,7 +63,7 @@ const Login = ({ setAuth }) => {
             {/* Right section for the login form */}
             <div className="w-1/2 flex justify-center items-center h-screen bg-gray-100">
                 <div className="w-full max-w-md p-8 space-y-6 bg-white shadow-md rounded-lg">
-                    <h2 className="text-2xl font-bold mb-6 text-center">Login to Your Account</h2>
+                    <h2 className="text-2xl font-bold mb-6 text-center text-blue-500">Login to Your Account</h2>
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div>
                             <input
