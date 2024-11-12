@@ -3,6 +3,7 @@ import { FaBars, FaUserCircle } from 'react-icons/fa';
 import { BiLogOut } from 'react-icons/bi';
 import { Drawer, IconButton, List, ListItem, ListItemText, Divider, Typography, Box } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import api from "../api";
 import '../styles/styles.css'; // Import external CSS
 
 const Sidebar = ({ handleLogout }) => {
@@ -18,10 +19,22 @@ const Sidebar = ({ handleLogout }) => {
   }, []);
 
   // Handle logout functionality
-  const handleLogoutClick = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    navigate('/login');
+  const handleLogoutClick = async () => {
+    try {
+      // Get the user ID from local storage or another place where it's stored
+      const userId = localStorage.getItem('userId');
+
+      // Call the backend logout route to clear the server-side cache
+      await api.post(`/logout/${userId}`);
+
+      // Clear local storage and navigate to the login page
+      localStorage.removeItem('token');
+      localStorage.removeItem('username');
+      localStorage.removeItem('userId');
+      navigate('/login');
+  } catch (error) {
+      console.error('Error during logout:', error);
+  }
   };
 
   // Handle navigation menu clicks

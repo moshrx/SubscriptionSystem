@@ -50,22 +50,43 @@
 
 .add-subscription-form input[type="checkbox"] {
     margin-right: 8px;
+    margin-left: 8px;
 }
 
-.add-subscription-form button {
-    display: block;
-    width: 100%;
-    background-color: #990011;
-    color: #FCF6F5;
-    padding: 12px;
-    border: none;
+.error-text {
+    color: #990011; 
+    font-size: small;
+}
+
+.select-dropdown {
+    max-height: 160px;
+    overflow-y: auto;
+}
+
+.add-subscription-form .form-buttons button {
+    padding: 12px 20px;
+    font-size: 16px;
     border-radius: 4px;
     cursor: pointer;
+    width: 48%; /* Ensures both buttons take up equal space */
+    display: inline-block;
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
-    transition: background-color 0.3s;
+    margin: 5px;
 }
 
-.add-subscription-form button:hover {
-    background-color: #7b0010;
+.add-subscription-form .button-group button:hover {
+    opacity: 0.9;
+}
+
+.add-subscription-form .add-subscription-btn {
+    background-color: #990011;
+    color: #FCF6F5;
+    border: none;
+}
+
+.add-subscription-form .cancel-btn {
+    background-color: #F4F4F4;
+    color: #990011;
+    border: 1px solid #990011;
 }

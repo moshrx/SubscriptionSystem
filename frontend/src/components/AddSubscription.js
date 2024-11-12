@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import '../styles/styles.css';
 import '../styles/addSubscription.css';
 
 const AddSubscriptionPage = () => {
@@ -9,6 +8,10 @@ const AddSubscriptionPage = () => {
     const existingSubscription = location.state?.existingSubscription || null;
 
     const [apps, setApps] = useState([]);
+    const [appError, setAppError] = useState('');
+    const [subscriptionDateError, setSubscriptionDateError] = useState('');
+    const [costError, setCostError] = useState('');
+    const [renewalMonthsError, setRenewalMonthsError] = useState('');
     const [isPremiumUser, setIsPremiumUser] = useState(false);
     const [subscription, setSubscription] = useState({
         appId: '',
@@ -200,9 +203,36 @@ const AddSubscriptionPage = () => {
     };
 
     const handleSubmit = async (e) => {
-        console.log("Existing Subs in handle submit- ",existingSubscription);
-
         e.preventDefault();
+
+        let valid = true;
+        
+        if (subscription.appId.trim() === "") {
+            setAppError("Please select an application." );
+            valid = false;
+        }else{
+            setAppError(" ");
+        }
+        if (subscription.cost.trim() === "") {
+            setCostError("Please enter the cost.");
+            valid = false;
+        }else{
+            setCostError(" ");
+        }
+        if(subscription.subscriptionDate.trim() === ""){
+            setSubscriptionDateError("Please select a subscription date.");
+            valid = false;
+        }else{
+            subscriptionDateError("");
+        }
+        if(subscription.renewalMonths.trim() === ""){
+            setRenewalMonthsError("Please select renewal months.");
+            valid = false;
+        }else{
+            setRenewalMonthsError("");
+        }
+
+        if (!valid) return;
 
         const apiUrl = isEditMode
             ? `http://localhost:5000/api/subscription/${existingSubscription.subscriptionId}/update`
@@ -238,37 +268,55 @@ const AddSubscriptionPage = () => {
             <form onSubmit={handleSubmit}>
                 <label>
                     Application:
-                    <select name="appId" value={subscription.appId} onChange={handleChange} disabled={isEditMode} required>
+                    <select name="appId" value={subscription.appId} onChange={handleChange} disabled={isEditMode} className="select-dropdown">
                         <option value="">Select an app</option>
-                        {apps.map((app) => (
-                            <option key={app.appId} value={app.appId}>{app.appName}</option>
+                        {Object.entries(
+                            apps.reduce((acc, app) => {
+                                const category = app.categoryDetails.category;
+                                if (!acc[category]) acc[category] = [];
+                                acc[category].push(app);
+                                return acc;
+                            }, {})
+                        ).map(([category, categoryApps]) => (
+                            <optgroup key={category} label={category}>
+                                {categoryApps.map((app) => (
+                                    <option key={app.appId} value={app.appId}>{app.appName}</option>
+                                ))}
+                            </optgroup>
                         ))}
                     </select>
+                    {appError && <p className="error-text">{appError}</p>}
                 </label>
+
+
                 <label>
                     Cost:
-                    <input type="number" name="cost" value={subscription.cost} onChange={handleCostChange} required />
+                    <input type="text" name="cost" value={subscription.cost} onChange={handleCostChange} />
+                    {costError && <p className="error-text">{costError}</p>}
                 </label>
                 <label>
                     Subscription Date:
-                    <input type="date" name="subscriptionDate" value={subscription.subscriptionDate} onChange={handleChange} required />
+                    <input type="date" name="subscriptionDate" value={subscription.subscriptionDate} onChange={handleChange} max={new Date().toISOString().split("T")[0]} />
+                    {subscriptionDateError && <p className="error-text">{subscriptionDateError}</p>}
                 </label>
                 <label>
                     Subscription Period (Months):
-                    <select name="renewalMonths" value={subscription.renewalMonths} onChange={handleChange} required>
+                    <select name="renewalMonths" value={subscription.renewalMonths} onChange={handleChange} >
+                        <option value="">Select subscribed months</option>
                         <option value="1">1</option>
                         <option value="3">3</option>
                         <option value="6">6</option>
                         <option value="9">9</option>
                         <option value="12">12</option>
                     </select>
+                    {renewalMonthsError && <p className="error-text">{renewalMonthsError}</p>}
                 </label>
                 <label>
                     Renewal Date:
                     <input type="date" name="renewalDate" value={subscription.renewalDate} readOnly />
                 </label>
                 <label>
-                    Enable Reminder:
+                    Enable Reminder:  
                     <input type="checkbox" name="reminderEnabled" checked={subscription.reminderEnabled} onChange={handleChange} />
                 </label>
                 {subscription.reminderEnabled && (
@@ -284,14 +332,14 @@ const AddSubscriptionPage = () => {
                     </>
                 )}
                 <div className="form-buttons">
-                    <button type="submit" className="btn btn-primary">
+                    <button type="submit" className="add-subscription-btn">
                         {isEditMode ? 'Update Subscription' : 'Add Subscription'}
                     </button>
-                    {isEditMode && (
-                        <button type="button" onClick={handleCancel} className="btn btn-secondary">
-                            Cancel
-                        </button>
-                    )}
+                    
+                    <button type="button" onClick={handleCancel} className="cancel-btn">
+                        Cancel
+                    </button>
+                    
                 </div>
             </form>
         </div>

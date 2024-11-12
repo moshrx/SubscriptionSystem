@@ -48,6 +48,15 @@ const sendReminderEmails = async () => {
         to: user.email,
         subject: `Reminder: Subscription Renewal for ${application.appName}`, // Use appName instead of appId
         text: `Hi ${user.name},\n\nThis is a reminder that your subscription for ${application.appName} is due for renewal on ${subscription.renewalDate.toDateString()}.\n\nThank you!`,
+        html: `
+                <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+                    <h2 style="color: #990011;">Hello ${user.name},</h2>
+                    <p>We wanted to let you know that your subscription for <strong>${application.appName}</strong> is due for renewal on <strong>${subscription.renewalDate.toDateString()}.</strong></p>
+                    <p>To continue enjoying your services, please renew your subscription at your earliest convenience.</p>
+                    <p>Best regards,</p>
+                    <p><strong>Snail Mail Team</strong></p>
+                </div>
+            `
       };
 
       await transporter.sendMail(mailOptions);
