@@ -91,14 +91,25 @@ const AddSubscriptionPage = () => {
         return '';
     };
 
-    const calculateReminderDays = (renewalDate, reminderDate) => {
-        if (!renewalDate || !reminderDate) return '';
-        const renewal = new Date(renewalDate);
-        const reminder = new Date(reminderDate);
-        const diffTime = renewal.getTime() - reminder.getTime();
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        return diffDays;
-    };
+    
+
+const calculateReminderDays = (renewalDate, reminderDate) => {
+    if (!renewalDate || !reminderDate) return '';
+
+    // Extract only the date part and create UTC dates without time
+    const [renewalYear, renewalMonth, renewalDay] = renewalDate.split('T')[0].split('-');
+    const [reminderYear, reminderMonth, reminderDay] = reminderDate.split('T')[0].split('-');
+
+    // Create UTC date objects without time to ensure accurate day calculation
+    const renewalUTC = Date.UTC(renewalYear, renewalMonth - 1, renewalDay);
+    const reminderUTC = Date.UTC(reminderYear, reminderMonth - 1, reminderDay);
+
+    // Calculate the difference in milliseconds and convert to days
+    const diffDays = Math.ceil((renewalUTC - reminderUTC) / (1000 * 60 * 60 * 24));
+
+    return diffDays;
+};
+    
     
 
     useEffect(() => {
