@@ -18,7 +18,7 @@ const DeactivatedSubscriptions = () => {
         const fetchDeactivatedSubscriptions = async () => {
             try {
                 const response = await axios.get(`/api/subscription/deactivated-apps/${userId}`);
-                setDeactivatedSubscriptions(response.data || []);
+                setDeactivatedSubscriptions(Array.isArray(response.data) ? response.data : []);
             } catch (err) {
                 setError("Failed to load deactivated subscriptions.");
             } finally {
