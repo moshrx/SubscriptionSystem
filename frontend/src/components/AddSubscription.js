@@ -24,14 +24,22 @@ const AddSubscriptionPage = () => {
         reminderDays: 3,
     });
 
-    const formatDate = (dateString) => {
-        if (!dateString) return '';
-        const date = new Date(dateString);
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    };
+    const formatDate = (value) => {
+        const date = new Date(value);
+      
+        const options = {
+          month: "2-digit",
+          day: "2-digit",
+          year: "numeric",
+          timeZone: "UTC", // Specify UTC to avoid local time zone issues
+        };
+        return date.toLocaleString("en-US", options);
+      };
+
+      const formatSubsDate = (value) =>{
+        const date = new Date(value);
+        return date.toISOString().split("T")[0];
+      }
 
     const [isEditMode, setIsEditMode] = useState(!!existingSubscription);
     useEffect(() => {
@@ -40,12 +48,12 @@ const AddSubscriptionPage = () => {
         setIsPremiumUser(premiumStatus);
 
 
-        if (existingSubscription) {
+        if (isEditMode && existingSubscription) {
             setIsEditMode(true);
             setSubscription({
                 appId: existingSubscription.appId || '',
                 cost: existingSubscription.cost || '',
-                subscriptionDate: formatDate(existingSubscription.subscriptionDate),
+                subscriptionDate: formatSubsDate(existingSubscription.subscriptionDate),
                 renewalDate: formatDate(existingSubscription.renewalDate),
                 reminderEnabled: existingSubscription.reminderEnabled || false,
                 reminderDate: formatDate(existingSubscription.reminderDate),
@@ -59,7 +67,7 @@ const AddSubscriptionPage = () => {
                 ),
             });
         }
-    }, [existingSubscription]);
+    }, [existingSubscription, isEditMode]);
 
     const calculateSubscriptionPeriod = (startDate, endDate) => {
         if (startDate && endDate) {
@@ -207,7 +215,8 @@ const AddSubscriptionPage = () => {
 
         let valid = true;
         
-        if (subscription.appId.trim() === "") {
+        console.log("Subs Id = ",subscription.appId);
+        if (subscription.appId === "") {
             setAppError("Please select an application." );
             valid = false;
         }else{
@@ -223,9 +232,9 @@ const AddSubscriptionPage = () => {
             setSubscriptionDateError("Please select a subscription date.");
             valid = false;
         }else{
-            subscriptionDateError("");
+            setSubscriptionDateError("");
         }
-        if(subscription.renewalMonths.trim() === ""){
+        if(subscription.renewalMonths === ""){
             setRenewalMonthsError("Please select renewal months.");
             valid = false;
         }else{
@@ -240,11 +249,17 @@ const AddSubscriptionPage = () => {
         
         const method = isEditMode ? 'PUT' : 'POST';
 
+        const updatedSubscription = isEditMode
+        ? { ...existingSubscription, ...subscription }
+        : subscription;
+
+        console.log("Updated subs details - ",updatedSubscription);
+
         try {
             const response = await fetch(apiUrl, {
                 method: method,
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(subscription)
+                body: JSON.stringify(updatedSubscription)
             });
 
             if (response.ok) {
