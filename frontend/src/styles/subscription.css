@@ -4,7 +4,7 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #FCF6F5; /* Background color for the whole section */
+    background-color: #F8F4F4; /* Soft light red background for the section */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     font-family: 'Montserrat', sans-serif;
@@ -13,18 +13,18 @@
 .subscription-cards h2 {
     margin-bottom: 20px;
     font-size: 28px; /* Bigger font size for the header */
-    color: #990011;
+    color: #D32F2F; /* Light red header color */
     text-align: center;
-    font-weight: bold; /* Bold header */
+    font-weight: bold;
 }
 
 /* Add Subscription Button */
 .subscription-cards .btn-primary {
-    background-color: #990011;
+    background-color: #D32F2F; /* Light red button */
     color: white;
     border: none;
     padding: 10px 15px;
-    border-radius: 5px;
+    border-radius: 25px;
     cursor: pointer;
     font-size: 16px;
     font-weight: 600;
@@ -37,14 +37,14 @@
 }
 
 .subscription-cards .btn-primary:hover {
-    background-color: #bb1122;
+    background-color: #C2185B; /* Darker red on hover */
 }
 
-/* Cards Container */
+/* Subscription Card Container */
 .cards-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
+    gap: 30px;
     justify-content: center;
 }
 
@@ -58,94 +58,68 @@
     font-size: 16px;
     text-align: center;
     transition: transform 0.3s, box-shadow 0.3s;
+    margin-bottom: 20px;
+    overflow: hidden; /* Prevent overflow */
 }
 
 .subscription-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .subscription-card h3 {
     font-size: 22px; /* Larger font size for the card header */
-    color: #990011;
+    color: #D32F2F; /* Light red for the title */
     margin-bottom: 10px;
-    font-weight: bold; /* Bold card header */
+    font-weight: bold;
 }
 
-/* Conditional Background Colors */
-.subscription-card.premium {
-    background-color: #e0ffe0; /* Light green for premium users */
+/* Subscription Table */
+.subscription-table {
+    width: 100%;
+    margin-top: 15px;
+    border-collapse: collapse; /* Ensure no borders between cells */
+    background-color: #fff;
 }
 
-.subscription-card.basic {
-    background-color: #ffe0e0; /* Light red for basic users */
+/* Remove any borders and outlines */
+.subscription-table td,
+.subscription-table th {
+    padding: 12px;
+    text-align: left;
+    color: #333;
+    background-color: #fff;
+    border: none; /* Remove all borders */
+    outline: none; /* Remove any outlines */
+    font-size: 14px;
 }
 
-.subscription-card.active {
-    background-color: #e0f7fa; /* Light cyan for active subscriptions */
+.subscription-table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Light background for alternate rows */
 }
 
-.subscription-card.inactive {
-    background-color: #f0f0f0; /* Light gray for inactive subscriptions */
-}
-
-/* Action Buttons */
-.subscription-card .actions {
-    margin-top: 20px;
-}
-
-/* Edit Button */
-.subscription-card .btn-secondary {
-    background-color: #444;
+/* Subscription Action Buttons */
+.subscription-table .actions button {
+    background-color: #D32F2F; /* Light red button */
     color: white;
     padding: 8px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
     font-size: 14px;
-    font-weight: 600;
-    transition: background-color 0.3s;
-    margin-right: 10px; /* Add space between Edit and Deactivate buttons */
-}
-
-.subscription-card .btn-secondary:hover {
-    background-color: #666;
-}
-
-/* Deactivate Button */
-.subscription-card .btn-danger {
-    background-color: #d9534f; /* Red color for deactivate button */
-    color: white;
-    padding: 8px 15px;
+    border-radius: 25px;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
 }
 
-.subscription-card .btn-danger:hover {
-    background-color: #c9302c;
+.subscription-table .actions button:hover {
+    background-color: #C2185B; /* Darker red on hover */
 }
 
-/* Deactivate Button */
-.subscription-card .btn-deactivate {
-    background-color: #d9534f; /* Red color for deactivate */
-    color: white;
-    padding: 8px 15px;
-    border: none;
-    border-radius: 5px;
+/* Hover Effect for Rows */
+.subscription-table tr:hover {
+    background-color: #FFEBEE; /* Light pink hover color */
     cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    transition: background-color 0.3s;
 }
-
-.subscription-card .btn-deactivate:hover {
-    background-color: #c9302c; /* Darker red on hover */
-}
-
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -159,12 +133,8 @@
     }
 
     .subscription-card .btn-secondary,
-    .subscription-card .btn-danger {
-        width: 100%; /* Make the buttons take up full width on small screens */
-        margin-bottom: 10px; /* Add space between buttons */
-    }
     .subscription-card .btn-deactivate {
         width: 100%;
-        padding: 10px;
+        margin-bottom: 5px;
     }
 }

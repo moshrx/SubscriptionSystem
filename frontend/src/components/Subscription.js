@@ -126,23 +126,39 @@ const Subscription = () => {
             </button>
             <UpgradeModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
 
+            {/* Subscription Cards */}
             <div className="cards-container">
                 {subscriptions.map((subscription) => (
                     <div key={subscription.subscriptionId} className="subscription-card">
                         <h3>{getAppName(subscription.appId)}</h3>
-                        <p><strong>Cost:</strong> {subscription.cost}</p>
-                        <p><strong>Subscription Date:</strong> {formatDate(subscription.subscriptionDate)}</p>
-                        <p><strong>Renewal Date:</strong> {formatDate(subscription.renewalDate)}</p>
-                        <p><strong>Reminder Date:</strong> {subscription.reminderDate ? formatDate(subscription.reminderDate) : '-'}</p>
 
-                        <div className="actions">
-                            <button onClick={() => handleEditSubscription(subscription)} className="btn btn-secondary">
-                                Edit
-                            </button>
-                            <button onClick={() => handleDeactivate(subscription.subscriptionId)} className="btn btn-deactivate">
-                                Deactivate
-                            </button>
-                        </div>
+                        {/* Subscription Table for each card */}
+                        <table className="subscription-table">
+                            <tbody>
+                                <tr>
+                                    <td><strong>Cost:</strong> {subscription.cost}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Subscription Date:</strong> {formatDate(subscription.subscriptionDate)}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Renewal Date:</strong> {formatDate(subscription.renewalDate)}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Reminder Date:</strong> {subscription.reminderDate ? formatDate(subscription.reminderDate) : '-'}</td>
+                                </tr>
+                                <tr>
+                                    <td className="actions">
+                                        <button onClick={() => handleEditSubscription(subscription)} className="btn btn-secondary">
+                                            Edit
+                                        </button>
+                                        <button onClick={() => handleDeactivate(subscription.subscriptionId)} className="btn btn-deactivate">
+                                            Deactivate
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 ))}
             </div>
