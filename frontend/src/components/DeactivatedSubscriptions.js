@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import '../styles/deactivated-subscription.css'; // Ensure this file is properly included
 
 const DeactivatedSubscriptions = () => {
     const [deactivatedSubscriptions, setDeactivatedSubscriptions] = useState([]);
@@ -17,10 +18,8 @@ const DeactivatedSubscriptions = () => {
         const fetchDeactivatedSubscriptions = async () => {
             try {
                 const response = await axios.get(`/api/subscription/deactivated-apps/${userId}`);
-                console.log("API response:", response.data);
-                setDeactivatedSubscriptions(Array.isArray(response.data) ? response.data : []);
+                setDeactivatedSubscriptions(response.data || []);
             } catch (err) {
-                console.error("Error fetching deactivated subscriptions:", err);
                 setError("Failed to load deactivated subscriptions.");
             } finally {
                 setLoading(false);
@@ -30,26 +29,43 @@ const DeactivatedSubscriptions = () => {
         fetchDeactivatedSubscriptions();
     }, [userId]);
 
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>{error}</div>;
+    }
+
+    if (deactivatedSubscriptions.length === 0) {
+        return <div>No deactivated subscriptions found.</div>;
+    }
+
     return (
         <div className="subscription-cards">
             <h2>Deactivated Subscriptions</h2>
-            {loading ? (
-                <p>Loading...</p>
-            ) : error ? (
-                <p>{error}</p>
-            ) : deactivatedSubscriptions.length === 0 ? (
-                <p>No deactivated subscriptions found.</p>
-            ) : (
-                <div className="cards-container">
-                    {deactivatedSubscriptions.map((subscription) => (
-                        <div key={subscription.subscriptionId} className="subscription-card">
-                            <h3>{subscription.appName}</h3>
-                            <p><strong>Cost:</strong> {subscription.cost}</p>
-                            <p><strong>Duration:</strong> {subscription.duration}</p>
-                        </div>
-                    ))}
-                </div>
-            )}
+            <div className="cards-container">
+                {deactivatedSubscriptions.map((subscription) => (
+                    <div key={subscription.subscriptionId} className="subscription-card">
+                        <h3>{subscription.appName}</h3>
+
+                        {/* Subscription Table for each deactivated subscription */}
+                        <table className="subscription-table">
+                            <tbody>
+                                <tr>
+                                    <td><strong>Cost:</strong> {subscription.cost}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Duration:</strong> {subscription.duration}</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Deactivation Date:</strong> {new Date(subscription.deactivationDate).toLocaleDateString()}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 };
