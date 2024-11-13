@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../styles/subscription.css';
 import UpgradeModal from './UpgradeModal';
 import { useNavigate } from 'react-router-dom';
+import { getUserSubscriptions } from '../api';
 
 const Subscription = () => {
     const [subscriptions, setSubscriptions] = useState([]);
@@ -11,6 +12,7 @@ const Subscription = () => {
     const navigate = useNavigate();
     const userId = localStorage.getItem('userId');
     const isPremiumUser = localStorage.getItem('isPremiumUser') === 'true';
+    const token = localStorage.getItem('token'); // Get the token outside the useEffect
 
     const handleAddSubscription = async () => {
         try {
@@ -64,15 +66,17 @@ const Subscription = () => {
     };
 
     useEffect(() => {
-        fetch(`http://localhost:5000/api/subscription/subscriptions?userId=${userId}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
+        if (!token) {
+            console.error('Token is missing.');
+            return;
+        }
+
+        // Fetch subscriptions using the getUserSubscriptions function
+        getUserSubscriptions(userId, token)
             .then(data => {
-                const parsedSubscriptions = data.map(subscription => ({
+                // Filter and map the subscriptions as required
+                const activeSubscriptions = data.filter(subscription => !subscription.inActive);
+                const parsedSubscriptions = activeSubscriptions.map(subscription => ({
                     ...subscription,
                     cost: subscription.cost?.$numberDecimal || subscription.cost
                 }));
@@ -85,11 +89,12 @@ const Subscription = () => {
                 setIsLoading(false);
             });
 
+        // Fetch applications data
         fetch('http://localhost:5000/api/subscription/apps')
             .then(response => response.json())
             .then(appsData => setApplications(appsData))
             .catch(error => console.error('Error fetching apps:', error));
-    }, []);
+    }, [userId, token]); // Now token is safely used outside
 
     const getAppName = (appId) => {
         const app = applications.find(app => app.appId === appId);

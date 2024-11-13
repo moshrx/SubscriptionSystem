@@ -223,7 +223,7 @@ const AddSubscriptionPage = () => {
             setSubscriptionDateError("Please select a subscription date.");
             valid = false;
         }else{
-            subscriptionDateError("");
+            setSubscriptionDateError("");
         }
         if(subscription.renewalMonths.trim() === ""){
             setRenewalMonthsError("Please select renewal months.");

@@ -46,6 +46,9 @@ const Sidebar = ({ handleLogout }) => {
       case 'subscriptions':
         navigate('/subscriptions');
         break;
+      case 'deactivated-subsciptions':
+        navigate('/deactivated-apps');
+        break;
       case 'explore':
         navigate('/explore');
         break;
@@ -81,6 +84,9 @@ const Sidebar = ({ handleLogout }) => {
             </ListItem>
             <ListItem button onClick={() => handleMenuClick('subscriptions')} className="drawer-item">
               <ListItemText primary="Subscriptions" />
+            </ListItem>
+            <ListItem button onClick={() => handleMenuClick('deactivated-subsciptions')} className="drawer-item">
+              <ListItemText primary="Deactivated Subscriptions" />
             </ListItem>
             <ListItem button onClick={() => handleMenuClick('explore')} className="drawer-item">
               <ListItemText primary="Explore" />
