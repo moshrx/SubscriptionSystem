@@ -32,9 +32,9 @@ const Sidebar = ({ handleLogout }) => {
       localStorage.removeItem('username');
       localStorage.removeItem('userId');
       navigate('/login');
-  } catch (error) {
+    } catch (error) {
       console.error('Error during logout:', error);
-  }
+    }
   };
 
   // Handle navigation menu clicks
@@ -48,9 +48,6 @@ const Sidebar = ({ handleLogout }) => {
         break;
       case 'deactivated-subsciptions':
         navigate('/deactivated-apps');
-        break;
-      case 'explore':
-        navigate('/explore');
         break;
       case 'Contact Us':
         navigate('/contact-us');
@@ -87,9 +84,6 @@ const Sidebar = ({ handleLogout }) => {
             </ListItem>
             <ListItem button onClick={() => handleMenuClick('deactivated-subsciptions')} className="drawer-item">
               <ListItemText primary="Deactivated Subscriptions" />
-            </ListItem>
-            <ListItem button onClick={() => handleMenuClick('explore')} className="drawer-item">
-              <ListItemText primary="Explore" />
             </ListItem>
             <ListItem button onClick={() => handleMenuClick('Contact Us')} className="drawer-item">
               <ListItemText primary="Contact Us" />
