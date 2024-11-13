@@ -90,9 +90,9 @@ const addSubscription = async (req, res) => {
 // Update subscription
 const updateSubscription = async (req, res) => {
     const { subscriptionId } = req.params;
-    const { cost, subscriptionDate, renewalMonths, reminderEnabled, reminderDays } = req.body;
+    const { userId, appId, cost, subscriptionDate, renewalMonths, reminderEnabled, reminderDays } = req.body;
     const cacheKey = `subscriptions:${req.body.userId}`;
-    const cacheDashKey = `dashboard:${userId}`;
+    const cacheDashKey = `dashboard:${req.body.userId}`;
 
     try {
         const subscription = await Subscription.findOne({ subscriptionId: String(subscriptionId) });
@@ -102,16 +102,22 @@ const updateSubscription = async (req, res) => {
 
         // Update only the fields that are allowed
         subscription.cost = cost;
+        subscription.appId = appId;
+        subscription.userId = userId;
+        subscription.subscriptionDate = subscriptionDate;
+
         const subDate = new Date(subscriptionDate);
         const renewalDate = new Date(subDate.setMonth(subDate.getMonth() + parseInt(renewalMonths, 10)));
-        
+
         // Calculate reminder date if reminders are enabled and reminderDays is provided
         let reminderDate = null;
         if (reminderEnabled && reminderDays) {
             reminderDate = new Date(renewalDate);
             reminderDate.setDate(renewalDate.getDate() - parseInt(reminderDays, 10));
         }
-
+        subscription.reminderEnabled = reminderEnabled;
+        subscription.reminderDate = reminderDate;
+            
         // Save the updated subscription
         await subscription.save();
 

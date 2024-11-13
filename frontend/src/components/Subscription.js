@@ -101,6 +101,18 @@ const Subscription = () => {
         return app ? app.appName : 'Unknown';
     };
 
+    const formatDate = (value) => {
+        const date = new Date(value);
+      
+        const options = {
+          month: "2-digit",
+          day: "2-digit",
+          year: "numeric",
+          timeZone: "UTC", // Specify UTC to avoid local time zone issues
+        };
+        return date.toLocaleString("en-US", options);
+      };
+
     if (isLoading) {
         return <div>Loading subscriptions...</div>;
     }
@@ -119,9 +131,9 @@ const Subscription = () => {
                     <div key={subscription.subscriptionId} className="subscription-card">
                         <h3>{getAppName(subscription.appId)}</h3>
                         <p><strong>Cost:</strong> {subscription.cost}</p>
-                        <p><strong>Subscription Date:</strong> {new Date(subscription.subscriptionDate).toLocaleDateString()}</p>
-                        <p><strong>Renewal Date:</strong> {new Date(subscription.renewalDate).toLocaleDateString()}</p>
-                        <p><strong>Reminder Date:</strong> {subscription.reminderDate ? new Date(subscription.reminderDate).toLocaleDateString() : '-'}</p>
+                        <p><strong>Subscription Date:</strong> {formatDate(subscription.subscriptionDate)}</p>
+                        <p><strong>Renewal Date:</strong> {formatDate(subscription.renewalDate)}</p>
+                        <p><strong>Reminder Date:</strong> {subscription.reminderDate ? formatDate(subscription.reminderDate) : '-'}</p>
 
                         <div className="actions">
                             <button onClick={() => handleEditSubscription(subscription)} className="btn btn-secondary">
