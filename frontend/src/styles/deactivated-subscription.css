@@ -1,4 +1,4 @@
-/* Subscription Cards Container */
+/* Deactivated Subscriptions Container */
 .subscription-cards {
     width: 90%;
     max-width: 1200px;
@@ -18,29 +18,7 @@
     font-weight: bold;
 }
 
-/* Add Subscription Button */
-.subscription-cards .btn-primary {
-    background-color: #D32F2F; /* Light red button */
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 25px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-    transition: background-color 0.3s;
-    margin-bottom: 20px;
-    display: block;
-    width: fit-content;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.subscription-cards .btn-primary:hover {
-    background-color: #C2185B; /* Darker red on hover */
-}
-
-/* Subscription Card Container */
+/* Deactivated Subscription Card Container */
 .cards-container {
     display: flex;
     flex-wrap: wrap;
@@ -74,7 +52,7 @@
     font-weight: bold;
 }
 
-/* Subscription Table */
+/* Deactivated Subscription Table */
 .subscription-table {
     width: 100%;
     margin-top: 15px;
@@ -96,23 +74,6 @@
 
 .subscription-table tr:nth-child(even) {
     background-color: #f9f9f9; /* Light background for alternate rows */
-}
-
-/* Subscription Action Buttons */
-.subscription-table .actions button {
-    background-color: #D32F2F; /* Light red button */
-    color: white;
-    padding: 8px 15px;
-    font-size: 14px;
-    border-radius: 25px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-right: 10px;
-}
-
-.subscription-table .actions button:hover {
-    background-color: #C2185B; /* Darker red on hover */
 }
 
 /* Hover Effect for Rows */
