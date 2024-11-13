@@ -8,10 +8,17 @@ const DeactivatedSubscriptions = () => {
     const userId = localStorage.getItem('userId');
 
     useEffect(() => {
+        if (!userId) {
+            setError("User ID not found.");
+            setLoading(false);
+            return;
+        }
+
         const fetchDeactivatedSubscriptions = async () => {
             try {
                 const response = await axios.get(`/api/subscription/deactivated-apps/${userId}`);
-                setDeactivatedSubscriptions(response.data || []);
+                console.log("API response:", response.data);
+                setDeactivatedSubscriptions(Array.isArray(response.data) ? response.data : []);
             } catch (err) {
                 console.error("Error fetching deactivated subscriptions:", err);
                 setError("Failed to load deactivated subscriptions.");
