@@ -108,6 +108,7 @@ const updateSubscription = async (req, res) => {
 
         const subDate = new Date(subscriptionDate);
         const renewalDate = new Date(subDate.setMonth(subDate.getMonth() + parseInt(renewalMonths, 10)));
+        subscription.renewalDate = renewalDate;
 
         // Calculate reminder date if reminders are enabled and reminderDays is provided
         let reminderDate = null;
@@ -117,7 +118,7 @@ const updateSubscription = async (req, res) => {
         }
         subscription.reminderEnabled = reminderEnabled;
         subscription.reminderDate = reminderDate;
-            
+
         // Save the updated subscription
         await subscription.save();
 
