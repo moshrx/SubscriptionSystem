@@ -41,6 +41,18 @@ const DeactivatedSubscriptions = () => {
         return <div>No deactivated subscriptions found.</div>;
     }
 
+    const formatSubsDate = (value) =>{
+        const date = new Date(value);
+      
+        const options = {
+          month: "2-digit",
+          day: "2-digit",
+          year: "numeric",
+          timeZone: "UTC", // Specify UTC to avoid local time zone issues
+        };
+        return date.toLocaleString("en-US", options);
+      }
+
     return (
         <div className="subscription-cards">
             <h2>Deactivated Subscriptions</h2>
@@ -56,10 +68,10 @@ const DeactivatedSubscriptions = () => {
                                     <td><strong>Cost:</strong> {subscription.cost}</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Duration:</strong> {subscription.duration}</td>
+                                    <td><strong>Subscription Date:</strong>{formatSubsDate(subscription.subscriptionDate)}</td>
                                 </tr>
                                 <tr>
-                                    <td><strong>Deactivation Date:</strong> {new Date(subscription.deactivationDate).toLocaleDateString()}</td>
+                                    <td><strong>Duration:</strong> {subscription.duration}</td>
                                 </tr>
                             </tbody>
                         </table>
