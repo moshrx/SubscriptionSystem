@@ -167,8 +167,8 @@ const getDeactivatedApps = async (req, res) => {
                 appName,
                 cost,
                 duration: `${durationMonths} months`,
-                subscriptionDate: subscriptionDate.toLocaleDateString(),
-                renewalDate: renewalDate.toLocaleDateString(),
+                subscriptionDate: subscription.subscriptionDate,
+                renewalDate: subscription.renewalDate,
             };
         });
 
