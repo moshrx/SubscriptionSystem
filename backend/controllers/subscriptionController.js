@@ -3,6 +3,7 @@ const Application = require('../models/application.models');
 const Category = require('../models/category.models');
 const client = require('../config/redisClient');
 const { v4: uuidv4 } = require("uuid");
+const cron = require('node-cron');
 
 const subscriptions = async (req, res) => {
     const userId = req.query.userId;
@@ -132,6 +133,37 @@ const updateSubscription = async (req, res) => {
         res.status(500).json({ error: 'Error updating subscription' });
     }
 };
+
+const autoDeactivateApps = async () =>{
+    const currentDate = new Date();
+
+    try{
+        const deactivateSubscription = await Subscription.find({
+            renewalDate: {$eq: currentDate.toISOString().split('T')[0]},
+            reminderEnabled: {$eq: true}
+        });
+
+        for(sub of deactivateSubscription){
+            sub.inActive = true;
+            sub.reminderEnabled = false;
+            sub.reminderDate = null;
+
+            await sub.save();
+
+            console.log(`Subscription ${sub.subscriptionId} deactivated Successfully`);
+                   
+        }}
+        catch (err){
+            console.log(err);
+            
+        }
+    }
+
+    cron.schedule('0 0 * * *', async () => {
+        console.log('Running scheduled task: Deactivating expired subscriptions');
+        await autoDeactivateApps();
+    });
+
 
 const getDeactivatedApps = async (req, res) => {
     const { userId } = req.params;

@@ -9,7 +9,7 @@ body {
 
 .dashboard {
   display: flex;
-  height: 100vh;
+  height: auto;
   width: 100%;
 }
 
@@ -364,20 +364,149 @@ max-width: 100%; /* Makes the chart responsive */
 max-height: 400px; /* Limit the height for larger screens */
 }
 
-/* Add media queries for responsiveness */
-@media (min-width: 768px) {
-.dashboard-charts {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Two columns on larger screens */
-}
+/* For smaller screens (max-width 1024px) */
+@media (max-width: 1024px) {
+  /* Adjust the dashboard layout for smaller screens */
+  .dashboard {
+    flex-direction: column; /* Stack the sidebar and body vertically */
+  }
+
+  .dashboard-body {
+    overflow-y: auto; /* Enable scrolling for smaller screens */
+    padding: 15px; /* Adjust padding for compact view */
+  }
+
+  .sidebar {
+    width: 100%; /* Make sidebar full width */
+    position: relative; /* Reset position for the mobile layout */
+    height: auto; /* Allow sidebar to adjust height */
+    padding: 10px;
+  }
+
+  .sidebar.closed {
+    transform: translateX(0); /* Show sidebar on smaller screens */
+  }
+
+  .toggle-btn {
+    right: 10px; /* Adjust toggle button position */
+    top: 10px; /* Adjust toggle button position */
+  }
+
+  .main-content {
+    padding: 15px; /* Adjust main content padding */
+  }
+
+  /* Modify dashboard overview and widgets for smaller screens */
+  .dashboard-overview {
+    flex-direction: column; /* Stack widgets vertically */
+  }
+
+  .widget {
+    flex: 1 1 100%; /* Make widgets full-width */
+    margin-bottom: 20px; /* Add spacing between widgets */
+  }
+
+  .chart-page {
+    padding: 15px; /* Reduced padding for compact screens */
+  }
+
+  .chart-container {
+    padding: 10px; /* Reduced padding in chart container */
+  }
+
+  .subscription-table {
+    margin: 10px 0; /* Reduced margin for smaller screens */
+    font-size: 14px; /* Adjust font size */
+  }
+
+  .header {
+    font-size: 20px; /* Reduce header size on smaller screens */
+    padding: 10px; /* Adjust padding for compact header */
+  }
+
+  .header-buttons {
+    flex-direction: column; /* Stack header buttons vertically */
+    align-items: flex-start; /* Align header buttons to the left */
+  }
 }
 
+/* For medium screens (max-width 768px) */
 @media (max-width: 768px) {
-.dashboard-overview {
-    flex-direction: column; /* Stack widgets on smaller screens */
+  .dashboard-body {
+    padding: 10px; /* Further reduced padding for compact view */
+  }
+
+  .widget {
+    flex: 1 1 100%; /* Widgets take full width */
+    margin-bottom: 15px; /* Spacing between widgets */
+  }
+
+  .chart-page {
+    padding: 10px; /* Adjust padding for smaller screens */
+  }
+
+  .dashboard-charts {
+    grid-template-columns: 1fr; /* Single column layout for charts */
+  }
+
+  .chart-container {
+    padding: 10px; /* Reduced padding for charts */
+    height: auto; /* Adjust height to content */
+  }
+
+  .footer {
+    padding: 5px; /* Reduced footer padding */
+  }
+
+  .subscription-table {
+    margin: 0; /* Remove extra margins */
+  }
+
+  .profile-section {
+    padding: 10px; /* Adjust profile section padding */
+  }
+
+  .toggle-btn {
+    top: 10px; /* Adjust toggle button position */
+    right: 10px; /* Adjust toggle button position */
+  }
 }
 
-.chart-container {
-    padding: 15px; /* Reduced padding for smaller screens */
-    height: auto; /* Adjust height based on content */
-}
+/* For smaller screens (max-width 480px) */
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 18px; /* Further reduce header text size */
+  }
+
+  .sidebar {
+    width: 100%; /* Sidebar takes full width */
+    padding: 5px; /* Reduced sidebar padding */
+  }
+
+  .subscription-table {
+    font-size: 12px; /* Further adjust font size */
+  }
+
+  .widget {
+    flex: 1 1 100%; /* Ensure widgets are stacked on top of each other */
+    margin-bottom: 15px; /* Spacing between widgets */
+  }
+
+  .footer {
+    font-size: 12px; /* Adjust footer font size */
+    padding: 5px; /* Reduced footer padding */
+  }
+
+  .profile-section {
+    padding: 5px; /* Reduced profile section padding */
+  }
+
+  .toggle-btn {
+    top: 5px; /* Adjust toggle button position */
+    right: 5px; /* Adjust toggle button position */
+  }
+
+  .dashboard-overview {
+    flex-direction: column; /* Stack widgets vertically on mobile */
+  }
 }
