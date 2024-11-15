@@ -23,11 +23,11 @@ const sendReminderEmails = async () => {
     // Get current date
     const currentDate = new Date();
 
-    // Find subscriptions with reminders enabled and a reminder date within today
+    // Find subscriptions with reminders enabled and a reminder date equal to today's date
     const subscriptions = await Subscription.find({
       reminderEnabled: true,
-      reminderDate: { $lte: currentDate },
-    });
+      reminderDate: { $eq: currentDate.toISOString().split('T')[0] }, // Compare only the date (ignoring time)
+      inActive: false    });
 
     for (const subscription of subscriptions) {
       // Find user associated with the subscription
@@ -42,11 +42,18 @@ const sendReminderEmails = async () => {
       // Skip if application not found
       if (!application) continue;
 
+      // Ensure the subscription has not expired (check if renewalDate is in the future)
+      const renewalDate = new Date(subscription.renewalDate);
+      if (renewalDate <= currentDate) {
+        console.log(`Skipping reminder for ${application.appName} as renewal date has passed.`);
+        continue; // Skip if the subscription has expired
+      }
+
       // Send reminder email
       const mailOptions = {
         from: process.env.EMAIL_ADDRESS,
         to: user.email,
-        subject: `Reminder: Subscription Renewal for ${application.appName}`, // Use appName instead of appId
+        subject: `Reminder: Subscription Renewal for ${application.appName}`,
         text: `Hi ${user.name},\n\nThis is a reminder that your subscription for ${application.appName} is due for renewal on ${subscription.renewalDate.toDateString()}.\n\nThank you!`,
         html: `
                 <div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
@@ -67,20 +74,26 @@ const sendReminderEmails = async () => {
         subscriptionId: subscription.subscriptionId,
         sentAt: currentDate,
       });
+
+      // Mark the reminder as sent
+      await Subscription.findByIdAndUpdate(subscription._id, {
+        reminderSent: true, // Flag to ensure the reminder is not sent again
+      });
+
+      console.log('Reminder email sent successfully for', application.appName);
     }
 
-    console.log('Reminder emails sent successfully');
   } catch (error) {
     console.error('Error sending reminder emails:', error);
   }
 };
 
-// Schedule the job to run every day at 4:20 PM
-cron.schedule('20 16 * * *', async () => {
-    console.log('Running scheduled task: Sending reminder emails at 4:20 PM');
+// Schedule the job to run once a day at midnight (you can adjust the time as needed)
+cron.schedule('0 0 * * *', async () => {
+    console.log('Running scheduled task: Sending reminder emails at midnight');
     await sendReminderEmails();
-  });
-  
+});
+
 module.exports = {
   sendReminderEmails,
 };

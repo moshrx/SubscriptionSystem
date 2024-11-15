@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../styles/addSubscription.css';
 
 const AddSubscriptionPage = () => {
@@ -348,7 +348,7 @@ const calculateReminderDays = (renewalDate, reminderDate) => {
                 {subscription.reminderEnabled && (
                     <>
                         <label>
-                            Reminder Days Before Renewal:
+                            Reminder Days Before Renewal:  &nbsp;
                             <input type="number" name="reminderDays" value={subscription.reminderDays} onChange={handleChange} min="1" max="7" disabled={!isPremiumUser}/>
                         </label>
                         <label>
@@ -368,6 +368,8 @@ const calculateReminderDays = (renewalDate, reminderDate) => {
                     
                 </div>
             </form>
+            <div className='danger'><Link to={'/contact-us'}> Couldn't  find the app you are looking for? click here to contact us </Link> </div>
+
         </div>
     );
 };

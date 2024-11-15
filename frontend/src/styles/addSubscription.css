@@ -1,5 +1,4 @@
-/* src/styles/AddSubscriptionPage.css */
-
+/* Basic form styling */
 .add-subscription-form {
     max-width: 600px;
     margin: 40px auto;
@@ -7,8 +6,7 @@
     border-radius: 8px;
     background-color: #FCF6F5;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .add-subscription-form h2 {
@@ -75,10 +73,6 @@
     margin: 5px;
 }
 
-.add-subscription-form .button-group button:hover {
-    opacity: 0.9;
-}
-
 .add-subscription-form .add-subscription-btn {
     background-color: #990011;
     color: #FCF6F5;
@@ -89,4 +83,91 @@
     background-color: #F4F4F4;
     color: #990011;
     border: 1px solid #990011;
+}
+
+/* Make the form more responsive */
+@media (max-width: 768px) {
+    .add-subscription-form {
+        padding: 20px;
+        max-width: 90%; /* Allow more room for smaller screens */
+    }
+
+    .add-subscription-form h2 {
+        font-size: 24px;
+    }
+
+    .add-subscription-form label {
+        font-size: 14px;
+    }
+
+    .add-subscription-form input[type="text"],
+    .add-subscription-form input[type="date"],
+    .add-subscription-form select {
+        font-size: 14px;
+    }
+
+    .add-subscription-form .form-buttons button {
+        width: 100%; /* Stack buttons vertically */
+        margin-bottom: 10px; /* Space between buttons */
+    }
+
+    .add-subscription-form .danger {
+        font-size: 14px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .add-subscription-form {
+        padding: 15px;
+    }
+
+    .add-subscription-form h2 {
+        font-size: 20px;
+    }
+
+    .add-subscription-form input[type="text"],
+    .add-subscription-form input[type="date"],
+    .add-subscription-form select {
+        font-size: 12px;
+    }
+
+    .add-subscription-form label {
+        font-size: 12px;
+    }
+
+    .add-subscription-form .form-buttons button {
+        font-size: 14px; /* Smaller text for buttons */
+        padding: 10px;
+    }
+
+    .add-subscription-form .danger {
+        font-size: 12px;
+        padding: 10px;
+    }
+}
+
+@media (max-width: 320px) {
+    .add-subscription-form {
+        padding: 10px;
+    }
+
+    .add-subscription-form h2 {
+        font-size: 18px;
+    }
+
+    .add-subscription-form input[type="text"],
+    .add-subscription-form input[type="date"],
+    .add-subscription-form select {
+        font-size: 12px;
+    }
+
+    .add-subscription-form .form-buttons button {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .add-subscription-form .danger {
+        font-size: 10px;
+    }
 }
