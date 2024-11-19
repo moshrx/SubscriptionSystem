@@ -17,6 +17,7 @@ const Register = () => {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d).{6,}$/;
+    const nameRegex = /^[^\d]*$/; // Ensures no digits are in the name
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -26,13 +27,16 @@ const Register = () => {
 
         let valid = true;
 
-        // Check if name field is empty
+        // Validate name field
         if (name.trim() === "") {
             setError((prev) => ({ ...prev, name: "Name is required." }));
             valid = false;
+        } else if (!nameRegex.test(name)) {
+            setError((prev) => ({ ...prev, name: "Name cannot contain numbers." }));
+            valid = false;
         }
 
-        // Check if email is valid
+        // Validate email field
         if (email.trim() === "") {
             setError((prev) => ({ ...prev, email: "Email is required." }));
             valid = false;
@@ -41,7 +45,7 @@ const Register = () => {
             valid = false;
         }
 
-        // Check if password is valid
+        // Validate password field
         if (password.trim() === "") {
             setError((prev) => ({ ...prev, password: "Password is required." }));
             valid = false;
@@ -59,7 +63,7 @@ const Register = () => {
 
         try {
             await api.post("/register", { name, email, password });
-            navigate("/login")
+            navigate("/login");
         } catch (err) {
             if (err.response && err.response.status === 400) {
                 setError((prev) => ({ ...prev, general: "User already registered." }));
